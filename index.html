@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spelling Station</title>
+<style>
+  :root{
+    --bg:#f6f1e7; --ink:#24302b; --ink2:#46524c; --muted:#6b756f; --card:#fffdf8; --line:#e3dccd;
+    --green:#2f7a55; --green-soft:#dcefe3; --red:#c2412d; --red-soft:#f8e0da;
+    --grey:#d9d2c3; --blue:#2c5d8a; --amber:#f4e3b5;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:ui-rounded,"SF Pro Rounded","Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+    -webkit-tap-highlight-color:transparent}
+  main{max-width:860px;margin:0 auto;padding:24px 20px 60px}
+  h1{font-size:30px;margin:0 0 4px;letter-spacing:-.5px}
+  h2{font-size:20px;margin:0 0 12px}
+  p{line-height:1.5}
+  .sub{color:var(--muted);margin:0 0 20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .between{justify-content:space-between}
+  button{font:inherit;font-weight:700;border:0;border-radius:14px;padding:14px 20px;font-size:18px;cursor:pointer;
+    background:var(--ink);color:#fff;min-height:52px}
+  button.secondary{background:#ece5d6;color:var(--ink)}
+  button.green{background:var(--green)}
+  button.red{background:var(--red)}
+  button.small{font-size:15px;padding:8px 14px;min-height:40px;border-radius:10px}
+  button:disabled{opacity:.4;cursor:default}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{background:#ece5d6;color:var(--ink);font-size:16px;padding:10px 16px;min-height:44px;border-radius:999px}
+  .chip.on{background:var(--ink);color:#fff}
+  .muted{color:var(--muted)}
+  .hidden{display:none !important}
+  .center{text-align:center}
+  .label{font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700}
+
+  /* Editor */
+  .erow{display:grid;grid-template-columns:minmax(120px,1fr) 2.4fr 44px;gap:8px;margin-bottom:8px;align-items:center}
+  .erow input{font:inherit;font-size:17px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:#fff;width:100%}
+  .erow input.word{font-weight:700}
+  .erow button{min-height:44px;padding:0;background:#ece5d6;color:var(--muted);border-radius:10px;font-size:18px}
+  .ehead{display:grid;grid-template-columns:minmax(120px,1fr) 2.4fr 44px;gap:8px;margin-bottom:6px}
+  textarea{width:100%;min-height:140px;font:inherit;font-size:16px;padding:12px;border-radius:12px;border:1px solid var(--line);background:#fff}
+  details summary{cursor:pointer;font-weight:700;margin:6px 0 10px}
+
+  /* Practice */
+  input.spell{width:100%;font:inherit;font-size:46px;font-weight:800;text-align:center;letter-spacing:3px;padding:16px;border-radius:16px;
+    border:3px solid var(--line);background:#fff;color:var(--ink);caret-color:var(--blue)}
+  input.spell:focus{outline:none;border-color:var(--blue)}
+  input.spell.right{border-color:var(--green);background:var(--green-soft)}
+  input.spell.wrong{border-color:var(--red);background:var(--red-soft)}
+  .hint{font-size:15px;color:var(--muted);text-align:center;margin:10px 0 0}
+  .tip{background:var(--amber);border-radius:14px;padding:14px 16px;margin-top:14px;font-size:20px;line-height:1.45;display:flex;gap:12px;align-items:flex-start}
+  .tip .t{flex:1}
+  .result{margin-top:14px;text-align:center}
+  .msg{font-size:26px;font-weight:800;margin:4px 0 6px}
+  .diff{font-size:40px;font-weight:800;letter-spacing:3px;margin:4px 0}
+  .diff span{display:inline-block;padding:0 2px;border-radius:6px}
+  .ok{color:var(--green)}
+  .bad{color:var(--red);background:var(--red-soft)}
+  .miss{color:var(--red);text-decoration:underline;text-decoration-thickness:4px;text-underline-offset:8px}
+
+  /* Dials */
+  .gauges{display:flex;justify-content:center;gap:18px;flex-wrap:wrap}
+  .gauges svg{width:min(230px,30vw);min-width:150px;height:auto;display:block}
+  .needle{transition:transform .7s cubic-bezier(.3,1.4,.5,1)}
+
+  /* Progress */
+  .chartwrap{position:relative}
+  .tooltip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;font-size:14px;padding:8px 10px;border-radius:8px;white-space:nowrap;transform:translate(-50%,-110%)}
+  table{width:100%;border-collapse:collapse;font-size:17px}
+  th{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+  td{padding:9px 8px;border-bottom:1px solid var(--line)}
+  td.num{font-variant-numeric:tabular-nums;color:var(--ink2)}
+  .dots{display:flex;gap:4px}
+  .dot{width:16px;height:16px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:900}
+  .dot.y{background:var(--green)} .dot.n{background:var(--red)} .dot.e{background:transparent;border:2px dashed var(--grey)}
+  .tricky{display:flex;flex-wrap:wrap;gap:8px}
+  .tw{background:var(--red-soft);border-radius:999px;padding:8px 14px;font-weight:700;font-size:17px}
+  .tw small{color:var(--muted);font-weight:600;margin-left:6px}
+  .big{font-size:56px;font-weight:800;margin:0}
+
+  select{font:inherit;font-size:17px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:#fff;width:100%;color:var(--ink)}
+  .tipnote{text-align:center;color:var(--ink2);font-weight:700;margin-top:12px}
+  .modal{position:fixed;inset:0;background:rgba(36,48,43,.45);display:flex;align-items:center;justify-content:center;padding:20px;z-index:10}
+  .modal .card{width:100%;max-width:420px;margin:0}
+  .modal input{width:100%;font:inherit;font-size:20px;padding:12px;border-radius:12px;border:1px solid var(--line);margin:4px 0 14px}
+
+  .btngrid{display:flex;flex-wrap:wrap;gap:10px}
+  .btngrid button{font-size:17px}
+  .btngrid button small{display:block;font-weight:600;font-size:13px;opacity:.8}
+  button.challenge{background:var(--blue)}
+  .grouplabel{margin:14px 0 8px}
+  .grouplabel:first-child{margin-top:0}
+  .setcard{border-left:6px solid var(--green)}
+  .setname{font:inherit;font-size:22px;font-weight:800;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:#fff;flex:1;min-width:180px;color:var(--ink)}
+  .scroll{overflow-x:auto}
+  .ctable th{white-space:nowrap;text-align:center;text-transform:none;letter-spacing:0;font-size:14px;color:var(--ink2)}
+  .ctable th:first-child{text-align:left}
+  .ctable td{padding:8px}
+  .ctable input[type=checkbox]{width:26px;height:26px;accent-color:var(--blue)}
+  .ctable input.cname{font:inherit;font-size:17px;font-weight:700;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:#fff;min-width:170px;width:100%}
+  .ctable button{min-height:40px;padding:0 12px;background:#ece5d6;color:var(--muted);border-radius:10px;font-size:16px}
+  input.num{font:inherit;font-size:17px;width:80px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:#fff}
+  .stickybar{position:sticky;bottom:0;background:var(--bg);padding:12px 0;border-top:1px solid var(--line);z-index:5}
+</style>
+</head>
+<body>
+<main>
+
+<!-- ================= HOME ================= -->
+<section id="home">
+  <h1>🚂 Spelling Station</h1>
+  <p class="sub">Choose who's playing, pick some spellings, then listen, type and press return.</p>
+
+  <div class="card">
+    <h2>Who's playing?</h2>
+    <div class="row between">
+      <div class="chips" id="kids"></div>
+      <div class="row">
+        <button class="small secondary" id="addKid">+ Child</button>
+        <button class="small secondary" id="renameKid">Rename</button>
+        <button class="small secondary" id="delKid">Remove</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="row between" style="margin-bottom:12px">
+      <h2 style="margin:0">Select spellings</h2>
+      <button class="small secondary" id="editWords">✏️ Edit spellings, sets & challenges</button>
+    </div>
+    <div id="selectBox"></div>
+  </div>
+
+  <div class="card">
+    <h2>Results <span class="muted" id="resultsWho" style="font-weight:600;font-size:16px"></span></h2>
+    <div id="resultsBox"></div>
+  </div>
+
+  <div class="card" id="voiceCard">
+    <details id="voiceDetails">
+      <summary style="margin:0">🔊 Voice and speed <span class="muted" id="voiceNow" style="font-weight:600"></span></summary>
+      <div style="margin-top:14px">
+        <div class="label" style="margin-bottom:6px">Voice</div>
+        <select id="voiceSel"></select>
+        <div class="label" style="margin:16px 0 6px">Speed: <span id="rateTxt"></span></div>
+        <input type="range" id="rate" min="0.45" max="1" step="0.05" style="width:100%">
+        <div class="row" style="margin-top:14px"><button class="small secondary" id="testVoice">▶ Try it</button></div>
+        <p class="muted" style="font-size:14px;margin:12px 0 0" id="voiceHelp">The most natural voices are listed first. On an iPad you can download better ones free:
+          <b>Settings → Accessibility → Spoken Content → Voices → English → UK</b>, then pick one marked <i>Enhanced</i> or <i>Premium</i> (e.g. Serena, Jamie or Stephanie). Close and reopen this page afterwards and it will appear here.</p>
+      </div>
+    </details>
+  </div>
+
+
+  <div class="card">
+    <h2>Clear history</h2>
+    <p class="muted" style="margin-top:0;font-size:15px">Erase results for the child who is playing. Spellings, sets and challenges are kept.</p>
+    <div class="row">
+      <select id="clearSel" style="flex:1;min-width:220px"></select>
+      <button class="red small" id="clearBtn" style="min-height:44px">Clear history</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= RESULTS ================= -->
+<section id="results" class="hidden">
+  <div class="row between">
+    <div>
+      <h1 id="resTitle"></h1>
+      <p class="sub" id="resSub"></p>
+    </div>
+    <div class="row">
+      <button class="green small" id="resPlay">Play this</button>
+      <button class="secondary small" id="resBack">Back</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Correct spellings in each round</h2>
+    <div class="muted" id="progressSummary" style="margin-bottom:10px"></div>
+    <div class="chartwrap" id="chartWrap">
+      <svg id="chart" width="100%" height="240" role="img" aria-label="Correct spellings in each round"></svg>
+      <div class="tooltip hidden" id="tt"></div>
+    </div>
+  </div>
+
+  <div class="card" id="trickyCard">
+    <div class="row between" style="margin-bottom:12px">
+      <div>
+        <h2 style="margin:0 0 4px">Tricky words</h2>
+        <div class="muted" style="font-size:15px">Spelt wrong at least once in the last 5 rounds</div>
+      </div>
+      <button class="red" id="startTricky">Focus on these</button>
+    </div>
+    <div class="tricky" id="trickyList"></div>
+    <p class="muted" id="trickyNone" style="margin:0">None — every word was right in the last 5 rounds. 🎉</p>
+  </div>
+
+  <div class="card">
+    <h2>Every word <span class="muted" style="font-weight:600;font-size:15px">· hardest first</span></h2>
+    <table>
+      <thead><tr><th>Word</th><th>Last 5 tries</th><th>Right</th><th>Tips used</th></tr></thead>
+      <tbody id="wordTable"></tbody>
+    </table>
+    <p class="muted" style="font-size:14px;margin:10px 0 0">Newest try on the right. A small t means the tip was used.</p>
+  </div>
+</section>
+
+<!-- ================= EDIT ================= -->
+<section id="edit" class="hidden">
+  <h1>Spellings, sets & challenges</h1>
+  <p class="sub">These are shared by every child. Each child's results are kept separately.</p>
+
+  <div class="card">
+    <h2>Add lots of spellings at once</h2>
+    <p class="muted" style="margin-top:0;font-size:15px">Paste a list, one per line, with the tip after a <b>|</b> sign. It's split into new sets for you.<br>
+      <code>because | Big Elephants Can Always Understand Small Elephants</code></p>
+    <textarea id="bulkBox" spellcheck="false" autocapitalize="off" autocorrect="off"></textarea>
+    <div class="row" style="margin-top:10px">
+      <label>Spellings per set <input class="num" type="number" id="bulkSize" min="1" value="10"></label>
+      <button class="small green" id="bulkAdd">Make sets</button>
+    </div>
+    <details style="margin-top:10px">
+      <summary>Fill the box with a national curriculum list</summary>
+      <p class="muted" style="margin-top:0;font-size:15px">Some words come with a starter tip you can change.</p>
+      <div class="row" id="presets"></div>
+    </details>
+  </div>
+
+  <div id="setsBox"></div>
+  <button class="secondary" id="addSet" style="margin-bottom:16px">+ New set</button>
+
+  <div class="card">
+    <h2>Challenges</h2>
+    <p class="muted" style="margin-top:0;font-size:15px">Tick the sets each challenge includes.</p>
+    <div class="scroll"><div id="chBox"></div></div>
+    <button class="small secondary" id="addCh" style="margin-top:10px">+ New challenge</button>
+  </div>
+
+  <div class="row stickybar">
+    <button class="green" id="saveWords">Save</button>
+    <button class="secondary" id="cancelEdit">Cancel</button>
+  </div>
+</section>
+
+<!-- ================= PRACTICE ================= -->
+<section id="practice" class="hidden">
+  <div class="row between" style="margin-bottom:12px">
+    <span class="label" id="roundLabel"></span>
+    <button class="small secondary" id="quit">Stop</button>
+  </div>
+
+  <div class="card">
+    <div class="gauges" id="gLive"></div>
+  </div>
+
+  <div class="card">
+    <div class="row" style="justify-content:center;margin-bottom:14px">
+      <button class="secondary" id="hear">🔊 Hear it again</button>
+      <button class="secondary" id="getTip">💡 Hear a tip</button>
+    </div>
+    <input class="spell" id="answer" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done" aria-label="Type the spelling">
+    <p class="hint" id="hint">Type the word, then press <b>return</b>.</p>
+    <div class="tipnote hidden" id="tipBox">💡 Listen to the tip. Tap “Hear a tip” to hear it again.</div>
+    <div class="result hidden" id="result">
+      <div class="msg" id="msg"></div>
+      <div id="fixWrap">
+        <div class="label">The spelling is</div>
+        <div class="diff" id="correct"></div>
+      </div>
+      <p class="hint">Press <b>return</b> for the next word.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DONE ================= -->
+<section id="done" class="hidden">
+  <h1 id="doneTitle"></h1>
+  <p class="sub" id="doneSub"></p>
+  <div class="card">
+    <div class="gauges" id="gDone"></div>
+  </div>
+  <div class="card" id="missCard">
+    <h2>Words to practise</h2>
+    <table><thead><tr><th>You wrote</th><th>Spelling</th><th></th></tr></thead><tbody id="missTable"></tbody></table>
+  </div>
+  <div class="row">
+    <button class="red" id="retryMissed">Try the wrong ones again</button>
+    <button class="secondary" id="doneResults">See results</button>
+    <button class="green" id="home2">Back to start</button>
+  </div>
+</section>
+
+</main>
+
+<div class="modal hidden" id="modal"><div class="card">
+  <h2 id="mTitle"></h2>
+  <input id="mInput" type="text" autocomplete="off" autocorrect="off" spellcheck="false">
+  <div class="row"><button class="green" id="mOk">OK</button><button class="secondary" id="mCancel">Cancel</button></div>
+</div></div>
+
+<script>
+(() => {
+  // ---------- Curriculum presets (England, statutory lists) with some starter tips ----------
+  const Y2 = "door floor poor because find kind mind behind child children wild climb most only both old cold gold hold told every everybody even great break steak pretty beautiful after fast last past father class grass pass plant path bath hour move prove improve sure sugar eye could should would who whole any many clothes busy people water again half money Mr Mrs parents Christmas";
+  const Y34 = "accident actually address answer appear arrive believe bicycle breath breathe build busy business calendar caught centre century certain circle complete consider continue decide describe different difficult disappear early earth eight eighth enough exercise experience experiment extreme famous favourite February forward forwards fruit grammar group guard guide heard heart height history imagine increase important interest island knowledge learn length library material medicine mention minute natural naughty notice occasion occasionally often opposite ordinary particular peculiar perhaps popular position possess possession possible potatoes pressure probably promise purpose quarter question recent regular reign remember sentence separate special straight strange strength suppose surprise therefore though although thought through various weight woman women";
+  const STARTER_TIPS = {
+    because:"Big Elephants Can Always Understand Small Elephants.",
+    could:"O U Lucky Duck: c-OULD.", should:"O U Lucky Duck: sh-OULD.", would:"O U Lucky Duck: w-OULD.",
+    people:"People Eat Orange Peel Like Elephants. Say it funny: pe-O-ple.",
+    beautiful:"Big Elephants Are Usually beautiful: b-e-a-u, then tiful.",
+    door:"Two o's, like two eyes peeping round the door.", floor:"Two o's: fl-OO-r.", poor:"Two o's: p-OO-r.",
+    eye:"e-y-e looks like two eyes with a nose in the middle.",
+    many:"Many has the word 'any' hiding inside: m + any.", any:"a-n-y. It hides inside m-ANY.",
+    busy:"A bus is always busy: BUS-y.",
+    again:"Say it like it looks: a-GAIN.",
+    Christmas:"Silent h after the C: C-h-r-i-s-t-mas. Always a capital C.",
+    hour:"Silent h at the start: h-OUR. Our hour!",
+    whole:"A whole doughnut still has a hole: w + hole.",
+    who:"Starts with wh, like what, why and where.",
+    clothes:"Clothes are made of cloth: cloth + es.",
+    half:"Silent l: ha-L-f.",
+    climb:"Silent b at the end: clim-B.",
+    children:"child + ren.",
+    pretty:"Double t in the middle: pre-TT-y.",
+    great:"g-r-e-a-t: you can eat something great.",
+    break:"b-r-e-a-k rhymes with steak, and is spelt the same way.",
+    parents:"Parents pay the rent: pa-RENT-s.",
+    water:"Say it how it looks: WAT-er.",
+    money:"Say it like it looks: MON-ey.",
+    sure:"Sounds like 'shore' but starts with s: s-u-r-e.", sugar:"Sounds like 'shoog' but starts with s: s-u-g-a-r.",
+    believe:"Never beLIEve a LIE.",
+    separate:"There's A RAT in sep-A-RAT-e.",
+    island:"An island IS LAND: is + land.",
+    February:"Say the hidden r: Feb-RU-ar-y.",
+    library:"Say both r's: li-BRAR-y.",
+    business:"Say it slowly: BUS-I-NESS.",
+    heart:"Your heart has an ear in it: h-EAR-t.",
+    heard:"You heard with your EAR: h-EAR-d.",
+    friend:"I'll be your fri-END to the END.",
+    necessary:"One Collar, two Sleeves.",
+    knowledge:"Silent k, and know + ledge.",
+    guard:"A silent u stands guard: g-U-ard.", guide:"g-U-ide, like guard.",
+    weight:"w + eight: it weighs eight kilos.", eight:"e-i-g-h-t: Eat Ice-cream, Get Happy Today.",
+    thought:"th + ought.", though:"th + ough.", through:"th + r + ough.",
+    enough:"e-n-o-u-g-h: say it 'e-NOUGH'.",
+    potatoes:"Potatoes have eyes AND toes.",
+    favourite:"British spelling has a u: fav-OU-rite.", centre:"British spelling ends -re: cent-RE."
+  };
+  const PRESETS = { "Year 2 common exception words": Y2, "Years 3–4 statutory words": Y34 };
+
+
+  // ---------- Storage (kept in this browser; fails safely) ----------
+  const KEY = "spelling-station.v3";
+  const uid = () => Math.random().toString(36).slice(2, 9);
+  const readJSON = k => { try { return JSON.parse(localStorage.getItem(k)); } catch(e) { return null; } };
+
+  let S = readJSON(KEY);
+  if (!S || !Array.isArray(S.sets) || !Array.isArray(S.children)) { S = migrate(); try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {} }
+  function migrate(){
+    const fresh = { sets:[], challenges:[], children:[], cur:null, rate:0.65 };
+    const old = readJSON("spelling-station.v2");
+    if (old && Array.isArray(old.children)) {
+      fresh.rate = old.rate || 0.65; fresh.voiceName = old.voiceName;
+      old.children.forEach(c => {
+        let setId = null;
+        if (c.words && c.words.length) {
+          setId = uid();
+          fresh.sets.push({ id:setId, name:`${c.name}'s words`, words:c.words.map(w => ({ w:w.w, tip:w.tip || "" })) });
+        }
+        fresh.children.push({ id:c.id, name:c.name, rounds:(c.rounds || []).filter(() => setId).map(r => ({
+          t:r.t,
+          src: r.kind === "all" ? { type:"set", id:setId } : { type:"focus", scope:{ type:"set", id:setId } },
+          planned: { [setId]: r.kind === "all" ? c.words.length : r.res.length },
+          res: r.res.map(x => ({ ...x, setId }))
+        })) });
+      });
+      fresh.cur = old.cur;
+    }
+    if (!fresh.sets.length) fresh.sets.push({ id:uid(), name:"Set 1", words:[] });
+    if (!fresh.children.length) fresh.children.push({ id:"k1", name:"Child 1", rounds:[] });
+    if (!fresh.children.find(c => c.id === fresh.cur)) fresh.cur = fresh.children[0].id;
+    return fresh;
+  }
+  if (typeof S.rate !== "number") S.rate = 0.65;
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {} };
+  const kid = () => S.children.find(c => c.id === S.cur) || S.children[0];
+
+  const $ = id => document.getElementById(id);
+  const SECTIONS = ["home","results","edit","practice","done"];
+  const show = id => { SECTIONS.forEach(s => $(s).classList.toggle("hidden", s !== id)); window.scrollTo(0,0); };
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const norm = s => String(s).trim().toLowerCase();
+  const shuffle = a => { a = a.slice(); for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+  const plural = (n, w) => `${n} ${w}${n === 1 ? "" : "s"}`;
+
+  // ---------- Speech ----------
+  // Voices vary by device. Rank so the most human-sounding British voices come first.
+  let voices = [], voice = null;
+  const NOVELTY = /Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Good News|Jester|Organ|Superstar|Trinoids|Whisper|Wobble|Zarvox|Junior|Ralph|Fred|Kathy|Grandma|Grandpa|Rocko|Shelley|Sandy|Flo|Eddy|Reed/i;
+  function score(v){
+    let n = 0;
+    if (v.lang === "en-GB" || /en[-_]GB/i.test(v.lang)) n += 40;
+    else if (/^en[-_](IE|AU|NZ)/i.test(v.lang)) n += 15;
+    if (/premium/i.test(v.name)) n += 35;
+    if (/enhanced|neural|natural|online/i.test(v.name)) n += 30;
+    if (/Serena|Jamie|Stephanie|Kate|Oliver|Daniel|Sonia|Libby|Ryan|Maisie|Google UK/i.test(v.name)) n += 8;
+    if (NOVELTY.test(v.name)) n -= 100;
+    return n;
+  }
+  const isGood = v => /premium|enhanced|neural|natural|online/i.test(v.name);
+  function loadVoices(){
+    try { voices = speechSynthesis.getVoices().filter(v => /^en/i.test(v.lang)).sort((a,b) => score(b) - score(a)); } catch(e) { voices = []; }
+    voice = voices.find(v => v.name === S.voiceName) || voices[0] || null;
+    renderVoice();
+  }
+  function renderVoice(){
+    const sel = $("voiceSel"); if (!sel) return;
+    sel.innerHTML = voices.length
+      ? voices.map(v => `<option value="${esc(v.name)}" ${voice && v.name===voice.name?"selected":""}>${esc(v.name)} (${esc(v.lang)})${isGood(v)?" ★":""}</option>`).join("")
+      : `<option>Default voice</option>`;
+    $("rate").value = S.rate; $("rateTxt").textContent = S.rate <= 0.55 ? "very slow" : S.rate <= 0.7 ? "slow" : S.rate <= 0.85 ? "steady" : "normal";
+    $("voiceNow").textContent = voice ? `· ${voice.name}` : "";
+  }
+  function say(text, factor){
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      if (voice) { u.voice = voice; u.lang = voice.lang; } else u.lang = "en-GB";
+      u.rate = S.rate * (factor || 1); u.pitch = 1;
+      speechSynthesis.speak(u);
+    } catch(e) {}
+  }
+
+
+  // ---------- Sounds: a bell "ding" and an "err" buzzer, made in the browser ----------
+  let actx = null;
+  function audio(){
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      if (actx.state === "suspended") actx.resume();
+    } catch(e) { actx = null; }
+    return actx;
+  }
+  function ding(){
+    const c = audio(); if (!c) return;
+    const t = c.currentTime + 0.01;
+    [[1318.5, .32], [2637, .10], [3955, .04], [1975.5, .06]].forEach(([f, g]) => {
+      const o = c.createOscillator(), v = c.createGain();
+      o.type = "sine"; o.frequency.value = f;
+      v.gain.setValueAtTime(0, t); v.gain.linearRampToValueAtTime(g, t + .006);
+      v.gain.exponentialRampToValueAtTime(.0001, t + 1.6);
+      o.connect(v); v.connect(c.destination); o.start(t); o.stop(t + 1.7);
+    });
+  }
+  // Game-show style "uh-uh" buzzer: two harsh, buzzy blasts, the second lower and longer
+  let distCurve = null;
+  function curve(){
+    if (distCurve) return distCurve;
+    const n = 1024; distCurve = new Float32Array(n);
+    for (let i = 0; i < n; i++) { const x = i / (n - 1) * 2 - 1; distCurve[i] = Math.tanh(x * 4); }
+    return distCurve;
+  }
+  function buzz(){
+    const c = audio(); if (!c) return;
+    const t0 = c.currentTime + 0.01;
+    const out = c.createGain(); out.gain.value = .055;
+    const shaper = c.createWaveShaper(); shaper.curve = curve();
+    const lp = c.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 2600;
+    shaper.connect(lp); lp.connect(out); out.connect(c.destination);
+    const blast = (start, dur, f) => {
+      const v = c.createGain();
+      v.gain.setValueAtTime(0, start); v.gain.linearRampToValueAtTime(1, start + .012);
+      v.gain.setValueAtTime(1, start + dur - .03); v.gain.linearRampToValueAtTime(0, start + dur);
+      v.connect(shaper);
+      [[f, "square"], [f * 1.012, "sawtooth"], [f * 2.01, "square"], [f / 2, "sawtooth"]].forEach(([fr, type], i) => {
+        const o = c.createOscillator(), g = c.createGain();
+        o.type = type; o.frequency.value = fr; g.gain.value = [.5, .4, .15, .35][i];
+        o.connect(g); g.connect(v); o.start(start); o.stop(start + dur + .02);
+      });
+    };
+    blast(t0, .29, 262);         // "uh" (higher)
+    blast(t0 + .335, .41, 165);   // "-UH"
+  }
+
+  // ---------- In-page dialog ----------
+  function ask(title, opts={}){
+    return new Promise(res => {
+      $("mTitle").textContent = title;
+      const inp = $("mInput");
+      inp.classList.toggle("hidden", !opts.input); inp.value = opts.value || "";
+      $("mOk").textContent = opts.ok || "OK";
+      $("modal").classList.remove("hidden");
+      if (opts.input) setTimeout(() => inp.focus(), 30);
+      const done = v => { $("modal").classList.add("hidden"); $("mOk").onclick = $("mCancel").onclick = inp.onkeydown = null; res(v); };
+      $("mOk").onclick = () => done(opts.input ? inp.value.trim() : true);
+      $("mCancel").onclick = () => done(null);
+      inp.onkeydown = e => { if (e.key === "Enter") $("mOk").click(); };
+    });
+  }
+
+
+  // ---------- Sets, challenges and scopes ----------
+  // A scope is { type:"set"|"challenge", id }
+  const setById = id => S.sets.find(s => s.id === id);
+  const chById = id => S.challenges.find(c => c.id === id);
+  const scopeObj = sc => sc && (sc.type === "set" ? setById(sc.id) : chById(sc.id));
+  const scopeName = sc => { const o = scopeObj(sc); return o ? o.name : "(deleted)"; };
+  const scopeOfSrc = src => src.scope || src;
+  function scopeSetIds(sc){
+    if (sc.type === "set") return setById(sc.id) ? [sc.id] : [];
+    const c = chById(sc.id); if (!c) return [];
+    return S.sets.filter(s => c.setIds.includes(s.id)).map(s => s.id);
+  }
+  // Words in a set or challenge, each tagged with the set it belongs to (duplicates removed)
+  function scopeWords(sc){
+    const seen = new Set(), out = [];
+    scopeSetIds(sc).forEach(id => setById(id).words.forEach(w => {
+      const k = norm(w.w); if (!k || seen.has(k)) return; seen.add(k);
+      out.push({ w:w.w, tip:w.tip, setId:id });
+    }));
+    return out;
+  }
+  function srcLabel(src){
+    const sc = scopeOfSrc(src), n = scopeName(sc);
+    if (src.type === "focus") return `${n}: tricky words`;
+    if (src.type === "retry") return `${n}: trying again`;
+    return n;
+  }
+
+  // ---------- Results for a scope ----------
+  // Full rounds count towards the graph. A challenge round also counts for every set in it.
+  function graphRounds(k, sc){
+    if (sc.type === "set") {
+      return k.rounds.filter(r => (r.src.type === "set" || r.src.type === "challenge") && r.planned && r.planned[sc.id])
+        .map(r => {
+          const res = r.res.filter(x => x.setId === sc.id);
+          return { r, right: res.filter(x => x.ok).length, answered: res.length, total: r.planned[sc.id], tips: res.filter(x => x.tip).length };
+        });
+    }
+    return k.rounds.filter(r => r.src.type === "challenge" && r.src.id === sc.id).map(r => ({
+      r, right: r.res.filter(x => x.ok).length, answered: r.res.length,
+      total: Object.values(r.planned || {}).reduce((a,b) => a + b, 0), tips: r.res.filter(x => x.tip).length
+    }));
+  }
+  function attemptsFor(k, w){ // w = { w, setId }
+    const key = norm(w.w), out = [];
+    k.rounds.forEach(r => r.res.forEach(x => { if (x.setId === w.setId && norm(x.w) === key) out.push(x); }));
+    return out;
+  }
+  function trickyWords(k, sc){
+    const words = scopeWords(sc), ids = new Set(words.map(w => w.setId));
+    const byKey = new Map(words.map(w => [w.setId + "|" + norm(w.w), w]));
+    const recent = k.rounds.filter(r => r.res.some(x => ids.has(x.setId))).slice(-5);
+    const misses = new Map();
+    recent.forEach(r => r.res.forEach(x => {
+      const key = x.setId + "|" + norm(x.w);
+      if (!x.ok && byKey.has(key)) misses.set(key, (misses.get(key) || 0) + 1);
+    }));
+    return [...misses.entries()].map(([key, n]) => ({ word:byKey.get(key), misses:n }))
+      .sort((a,b) => b.misses - a.misses || a.word.w.localeCompare(b.word.w));
+  }
+
+  // ---------- Home ----------
+  function renderHome(){
+    const k = kid();
+    $("kids").innerHTML = S.children.map(c => `<button class="chip ${c.id===k.id?"on":""}" data-id="${c.id}">${esc(c.name)}</button>`).join("");
+    $("delKid").disabled = S.children.length < 2;
+    $("resultsWho").textContent = `for ${k.name}`;
+
+    const setBtns = S.sets.map(s => {
+      const n = s.words.length;
+      return `<button class="green" data-type="set" data-id="${s.id}" ${n?"":"disabled"}>${esc(s.name)}<small>${plural(n,"spelling")}</small></button>`;
+    }).join("");
+    const chBtns = S.challenges.map(c => {
+      const n = scopeWords({ type:"challenge", id:c.id }).length;
+      return `<button class="challenge" data-type="challenge" data-id="${c.id}" ${n?"":"disabled"}>🏆 ${esc(c.name)}<small>${plural(n,"spelling")}</small></button>`;
+    }).join("");
+    const anyWords = S.sets.some(s => s.words.length);
+    $("selectBox").innerHTML = !anyWords
+      ? `<p class="muted" style="margin:0">No spellings yet. Tap <b>Edit spellings, sets & challenges</b> to add some.</p>`
+      : `<div class="label grouplabel">Sets</div><div class="btngrid">${setBtns}</div>` +
+        (S.challenges.length ? `<div class="label grouplabel">Challenges</div><div class="btngrid">${chBtns}</div>` : "");
+
+    const resBtn = (type, o) => {
+      const n = graphRounds(k, { type, id:o.id }).length;
+      return `<button class="secondary" data-type="${type}" data-id="${o.id}">${type === "challenge" ? "🏆 " : ""}${esc(o.name)}<small>${plural(n,"round")}</small></button>`;
+    };
+    $("resultsBox").innerHTML = !anyWords ? `<p class="muted" style="margin:0">Results appear here once there are spellings to practise.</p>` :
+      `<div class="label grouplabel">Sets</div><div class="btngrid">${S.sets.map(s => resBtn("set", s)).join("")}</div>` +
+      (S.challenges.length ? `<div class="label grouplabel">Challenges</div><div class="btngrid">${S.challenges.map(c => resBtn("challenge", c)).join("")}</div>` : "");
+
+    $("clearSel").innerHTML = `<option value="all">All of ${esc(k.name)}'s results</option>` +
+      S.sets.map(s => `<option value="set:${s.id}">Set: ${esc(s.name)}</option>`).join("") +
+      S.challenges.map(c => `<option value="challenge:${c.id}">Challenge: ${esc(c.name)}</option>`).join("");
+    show("home");
+  }
+
+  $("selectBox").onclick = e => {
+    const b = e.target.closest("button[data-type]"); if (!b || b.disabled) return;
+    const sc = { type:b.dataset.type, id:b.dataset.id };
+    startRound(scopeWords(sc), { type:sc.type, id:sc.id });
+  };
+  $("resultsBox").onclick = e => {
+    const b = e.target.closest("button[data-type]"); if (!b) return;
+    openResults({ type:b.dataset.type, id:b.dataset.id });
+  };
+
+  $("kids").onclick = e => { const id = e.target.dataset && e.target.dataset.id; if (id) { S.cur = id; save(); renderHome(); } };
+  $("addKid").onclick = async () => {
+    const name = await ask("Child's name?", { input:true, ok:"Add" }); if (!name) return;
+    const id = "k" + Date.now(); S.children.push({ id, name, rounds:[] }); S.cur = id; save(); renderHome();
+  };
+  $("renameKid").onclick = async () => {
+    const k = kid(); const name = await ask("New name?", { input:true, value:k.name, ok:"Save" }); if (!name) return;
+    k.name = name; save(); renderHome();
+  };
+  $("delKid").onclick = async () => {
+    const k = kid(); if (S.children.length < 2) return;
+    if (!await ask(`Remove ${k.name} and all their results?`, { ok:"Remove" })) return;
+    S.children = S.children.filter(c => c.id !== k.id); S.cur = S.children[0].id; save(); renderHome();
+  };
+
+  $("clearBtn").onclick = async () => {
+    const k = kid(), v = $("clearSel").value;
+    if (v === "all") {
+      if (!await ask(`Erase all of ${k.name}'s results? This can't be undone.`, { ok:"Erase" })) return;
+      k.rounds = [];
+    } else {
+      const [type, id] = v.split(":");
+      if (type === "set") {
+        if (!await ask(`Erase ${k.name}'s results for ${setById(id).name}? This includes how they did on this set inside challenges. This can't be undone.`, { ok:"Erase" })) return;
+        k.rounds.forEach(r => { r.res = r.res.filter(x => x.setId !== id); if (r.planned) delete r.planned[id]; });
+        k.rounds = k.rounds.filter(r => r.res.length);
+      } else {
+        if (!await ask(`Erase ${k.name}'s rounds of ${chById(id).name}? Those rounds will also be removed from each set's results. This can't be undone.`, { ok:"Erase" })) return;
+        k.rounds = k.rounds.filter(r => { const sc = scopeOfSrc(r.src); return !(sc.type === "challenge" && sc.id === id); });
+      }
+    }
+    save(); renderHome();
+  };
+
+  // ---------- Results view ----------
+  let RS = null; // current results scope
+  function openResults(sc){
+    RS = sc;
+    const k = kid(), o = scopeObj(sc);
+    $("resTitle").textContent = (sc.type === "challenge" ? "🏆 " : "") + o.name;
+    const nWords = scopeWords(sc).length;
+    $("resSub").textContent = `${k.name}'s results · ${plural(nWords, "spelling")}` +
+      (sc.type === "challenge" ? ` · sets: ${scopeSetIds(sc).map(id => setById(id).name).join(", ") || "none"}` : "");
+    $("resPlay").disabled = !nWords;
+
+    show("results");
+    drawLine(k, sc);
+
+    const tricky = trickyWords(k, sc);
+    const anyAttempts = k.rounds.some(r => r.res.some(x => scopeSetIds(sc).includes(x.setId)));
+    $("trickyCard").classList.toggle("hidden", !anyAttempts);
+    $("trickyList").innerHTML = tricky.map(t => `<span class="tw">${esc(t.word.w)}<small>✗ ${t.misses}</small></span>`).join("");
+    $("trickyNone").classList.toggle("hidden", tricky.length > 0);
+    $("startTricky").classList.toggle("hidden", !tricky.length);
+    $("startTricky").textContent = `Focus on these (${tricky.length})`;
+
+    const rows = scopeWords(sc).map(w => {
+      const a = attemptsFor(k, w), right = a.filter(x => x.ok).length;
+      return { w, a, right, pct: a.length ? right / a.length : 2, tips: a.filter(x => x.tip).length };
+    }).sort((x,y) => x.pct - y.pct || y.a.length - x.a.length || x.w.w.localeCompare(y.w.w));
+    $("wordTable").innerHTML = rows.map(r => {
+      const last = r.a.slice(-5);
+      const dots = Array(5 - last.length).fill('<span class="dot e"></span>').join("") +
+        last.map(x => `<span class="dot ${x.ok?"y":"n"}" title="${x.ok?"Right":"Wrong: "+esc(x.a)}">${x.tip?"t":""}</span>`).join("");
+      return `<tr><td><b>${esc(r.w.w)}</b></td><td><div class="dots">${dots}</div></td>
+        <td class="num">${r.a.length ? `${r.right} of ${r.a.length}` : "—"}</td><td class="num">${r.tips || "—"}</td></tr>`;
+    }).join("") || `<tr><td colspan="4" class="muted">No spellings in here yet.</td></tr>`;
+  }
+  $("resBack").onclick = renderHome;
+  $("resPlay").onclick = () => startRound(scopeWords(RS), { type:RS.type, id:RS.id });
+  $("startTricky").onclick = () => startRound(trickyWords(kid(), RS).map(t => t.word), { type:"focus", scope:{ ...RS } });
+
+  function niceMax(m){ for (const s of [1,2,5,10,15,20,25,50,100]) if (m / s <= 6) return { step:s, top:Math.ceil(m / s) * s }; return { step:100, top:Math.ceil(m/100)*100 }; }
+
+  function drawLine(k, sc){
+    const all = graphRounds(k, sc);
+    const svg = $("chart"), tt = $("tt"); tt.classList.add("hidden");
+    if (!all.length) {
+      svg.innerHTML = ""; svg.style.display = "none";
+      $("progressSummary").textContent = "No rounds yet. Play this " + (sc.type === "set" ? "set" : "challenge") + " to start the graph.";
+      return;
+    }
+    svg.style.display = "";
+    const pts = all.slice(-20), offset = all.length - pts.length;
+    const W = svg.clientWidth || 780, H = 240, L = 40, Rm = 14, T = 14, B = 34, pw = W - L - Rm, ph = H - T - B;
+    const maxTotal = Math.max(scopeWords(sc).length, ...pts.map(p => p.total), 1);
+    const { step, top } = niceMax(maxTotal);
+    const X = i => pts.length === 1 ? L + pw / 2 : L + 12 + (pw - 24) * i / (pts.length - 1);
+    const Y = v => T + ph - ph * v / top;
+    let g = "";
+    for (let v = 0; v <= top; v += step) {
+      g += `<line x1="${L}" x2="${W-Rm}" y1="${Y(v)}" y2="${Y(v)}" stroke="#e3dccd" stroke-width="1"/>`;
+      g += `<text x="${L-8}" y="${Y(v)+4}" text-anchor="end" font-size="12" fill="#6b756f">${v}</text>`;
+    }
+    g += `<line x1="${L}" x2="${W-Rm}" y1="${Y(maxTotal)}" y2="${Y(maxTotal)}" stroke="#6b756f" stroke-width="1" stroke-dasharray="4 4"/>`;
+    g += `<text x="${W-Rm}" y="${Y(maxTotal)-6}" text-anchor="end" font-size="12" fill="#6b756f">all ${maxTotal} right</text>`;
+    g += `<path d="${pts.map((p,i) => `${i?"L":"M"}${X(i)},${Y(p.right)}`).join(" ")}" fill="none" stroke="#2f7a55" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+    const labelEvery = Math.ceil(pts.length / 12);
+    pts.forEach((p, i) => {
+      g += `<circle cx="${X(i)}" cy="${Y(p.right)}" r="5.5" fill="#2f7a55" stroke="#fffdf8" stroke-width="2"/>`;
+      if (i % labelEvery === 0 || i === pts.length - 1) g += `<text x="${X(i)}" y="${H-12}" text-anchor="middle" font-size="12" fill="#6b756f">${offset + i + 1}</text>`;
+    });
+    pts.forEach((p, i) => {
+      const half = pts.length === 1 ? pw / 2 : (pw - 24) / (pts.length - 1) / 2;
+      g += `<rect class="hit" data-i="${i}" x="${X(i) - half}" y="${T}" width="${half * 2}" height="${ph}" fill="transparent"/>`;
+    });
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("height", H);
+    svg.innerHTML = g;
+
+    svg.querySelectorAll(".hit").forEach(el => {
+      const showTip = () => {
+        const i = +el.dataset.i, p = pts[i], d = new Date(p.r.t);
+        const via = sc.type === "set" && p.r.src.type === "challenge" ? ` · in ${esc(scopeName(p.r.src))}` : "";
+        tt.innerHTML = `<b>Round ${offset + i + 1}</b> · ${d.toLocaleDateString("en-GB",{day:"numeric",month:"short"})}${via}<br>` +
+          `${p.right} of ${p.total} right${p.answered < p.total ? " (stopped early)" : ""}${p.tips ? ` · ${plural(p.tips,"tip")}` : ""}`;
+        const scale = svg.clientWidth / W;
+        tt.style.left = Math.min(Math.max(X(i) * scale, 110), svg.clientWidth - 110) + "px";
+        tt.style.top = Y(p.right) * scale + "px";
+        tt.classList.remove("hidden");
+      };
+      el.addEventListener("mouseenter", showTip); el.addEventListener("click", showTip);
+      el.addEventListener("mouseleave", () => tt.classList.add("hidden"));
+    });
+
+    const first = all[0], last = all[all.length - 1];
+    $("progressSummary").textContent = all.length === 1
+      ? `First round: ${first.right} of ${first.total} right.`
+      : `First round: ${first.right} of ${first.total} right. Latest: ${last.right} of ${last.total} right.` +
+        (sc.type === "set" && all.some(p => p.r.src.type === "challenge") ? " Includes this set's words from challenge rounds." : "");
+  }
+  window.addEventListener("resize", () => { if (!$("results").classList.contains("hidden") && RS) drawLine(kid(), RS); });
+
+  // ---------- Editor (works on a draft until Save) ----------
+  let D = null;
+  $("editWords").onclick = () => {
+    D = JSON.parse(JSON.stringify({ sets:S.sets, challenges:S.challenges }));
+    if (!D.sets.length) D.sets.push({ id:uid(), name:"Set 1", words:[] });
+    D.sets.forEach(s => { if (!s.words.length) s.words.push({ w:"", tip:"" }); });
+    $("bulkBox").value = "";
+    renderSets(); renderChallenges(); show("edit");
+  };
+  function rowHTML(w, wi){
+    return `<div class="erow" data-wi="${wi}"><input class="word" data-f="w" placeholder="spelling" value="${esc(w.w)}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      <input class="tipin" data-f="tip" placeholder="Tip: a story, rhyme, or how to say it" value="${esc(w.tip)}">
+      <button data-act="delrow" title="Remove" aria-label="Remove">✕</button></div>`;
+  }
+  function renderSets(){
+    $("setsBox").innerHTML = D.sets.map(s => `<div class="card setcard" data-set="${s.id}">
+      <div class="row" style="margin-bottom:14px">
+        <input class="setname" data-f="setname" value="${esc(s.name)}" aria-label="Set name">
+        <button class="small secondary" data-act="delset">Delete set</button>
+      </div>
+      <div class="ehead label"><span>Spelling</span><span>Tip (spoken aloud, never shown)</span><span></span></div>
+      ${s.words.map(rowHTML).join("")}
+      <div class="row"><button class="small secondary" data-act="addrow">+ Add a spelling</button></div>
+      <details style="margin-top:10px"><summary>Paste a list into this set</summary>
+        <textarea class="paste" placeholder="word | tip, one per line"></textarea>
+        <div class="row" style="margin-top:8px"><button class="small secondary" data-act="paste">Add these</button></div>
+      </details>
+    </div>`).join("");
+  }
+  function renderChallenges(){
+    if (!D.challenges.length) { $("chBox").innerHTML = `<p class="muted" style="margin:0">No challenges yet.</p>`; return; }
+    $("chBox").innerHTML = `<table class="ctable"><thead><tr><th>Challenge</th>${D.sets.map(s => `<th>${esc(s.name || "Untitled")}</th>`).join("")}<th></th></tr></thead><tbody>` +
+      D.challenges.map((c, ci) => `<tr data-ci="${ci}"><td><input class="cname" data-f="cname" value="${esc(c.name)}" aria-label="Challenge name"></td>` +
+        D.sets.map(s => `<td class="center"><input type="checkbox" data-set="${s.id}" ${c.setIds.includes(s.id) ? "checked" : ""} aria-label="${esc(s.name)}"></td>`).join("") +
+        `<td><button data-act="delch" aria-label="Delete challenge">✕</button></td></tr>`).join("") + `</tbody></table>`;
+  }
+  const parseLines = text => text.split(/\n+/).map(line => {
+    const i = line.indexOf("|");
+    return i >= 0 ? { w: line.slice(0,i).trim(), tip: line.slice(i+1).trim() } : { w: line.trim(), tip: "" };
+  }).filter(x => x.w);
+  function addWords(set, list){
+    set.words = set.words.filter(w => w.w.trim() || w.tip.trim());
+    const have = new Set(set.words.map(w => norm(w.w)));
+    list.forEach(x => { if (have.has(norm(x.w))) return; have.add(norm(x.w)); set.words.push({ w:x.w, tip:x.tip }); });
+  }
+
+  $("setsBox").addEventListener("input", e => {
+    const f = e.target.dataset.f; if (!f) return;
+    const set = D.sets.find(s => s.id === e.target.closest(".setcard").dataset.set);
+    if (f === "setname") { set.name = e.target.value; renderChallenges(); return; }
+    set.words[+e.target.closest(".erow").dataset.wi][f] = e.target.value;
+  });
+  $("setsBox").addEventListener("click", async e => {
+    const act = e.target.dataset && e.target.dataset.act; if (!act) return;
+    const card = e.target.closest(".setcard"), set = D.sets.find(s => s.id === card.dataset.set);
+    if (act === "addrow") {
+      set.words.push({ w:"", tip:"" }); renderSets();
+      const ins = document.querySelectorAll(`.setcard[data-set="${set.id}"] .word`); ins[ins.length - 1].focus();
+    } else if (act === "delrow") {
+      set.words.splice(+e.target.closest(".erow").dataset.wi, 1); renderSets();
+    } else if (act === "paste") {
+      addWords(set, parseLines(card.querySelector(".paste").value)); renderSets();
+    } else if (act === "delset") {
+      const n = set.words.filter(w => w.w.trim()).length;
+      if (n && !await ask(`Delete “${set.name}” and its ${plural(n,"spelling")}?`, { ok:"Delete" })) return;
+      D.sets = D.sets.filter(s => s !== set);
+      D.challenges.forEach(c => c.setIds = c.setIds.filter(id => id !== set.id));
+      renderSets(); renderChallenges();
+    }
+  });
+  $("addSet").onclick = () => {
+    const s = { id:uid(), name:`Set ${D.sets.length + 1}`, words:[{ w:"", tip:"" }] };
+    D.sets.push(s); renderSets(); renderChallenges();
+    document.querySelector(`.setcard[data-set="${s.id}"] .setname`).select();
+  };
+  $("chBox").addEventListener("input", e => {
+    const tr = e.target.closest("tr[data-ci]"); if (!tr) return;
+    const c = D.challenges[+tr.dataset.ci];
+    if (e.target.dataset.f === "cname") c.name = e.target.value;
+    else if (e.target.type === "checkbox") {
+      const id = e.target.dataset.set;
+      c.setIds = e.target.checked ? [...new Set([...c.setIds, id])] : c.setIds.filter(x => x !== id);
+    }
+  });
+  $("chBox").addEventListener("click", e => {
+    if (!(e.target.dataset && e.target.dataset.act === "delch")) return;
+    D.challenges.splice(+e.target.closest("tr").dataset.ci, 1); renderChallenges();
+  });
+  $("addCh").onclick = () => {
+    D.challenges.push({ id:uid(), name:`Challenge ${D.challenges.length + 1}`, setIds:[] }); renderChallenges();
+    const ins = document.querySelectorAll("#chBox .cname"); ins[ins.length - 1].select();
+  };
+  $("presets").innerHTML = Object.keys(PRESETS).map(p => `<button class="small secondary" data-p="${p}">${p}</button>`).join("");
+  $("presets").onclick = e => {
+    const p = e.target.dataset && e.target.dataset.p; if (!p) return;
+    $("bulkBox").value = PRESETS[p].split(" ").map(w => STARTER_TIPS[w] ? `${w} | ${STARTER_TIPS[w]}` : w).join("\n");
+  };
+  $("bulkAdd").onclick = () => {
+    const list = parseLines($("bulkBox").value); if (!list.length) return;
+    const size = Math.max(1, parseInt($("bulkSize").value, 10) || 10);
+    // Drop sets that are still completely empty
+    D.sets = D.sets.filter(s => s.words.some(w => w.w.trim()));
+    let n = D.sets.length;
+    for (let i = 0; i < list.length; i += size) {
+      const s = { id:uid(), name:`Set ${++n}`, words:[] }; addWords(s, list.slice(i, i + size)); D.sets.push(s);
+    }
+    $("bulkBox").value = ""; renderSets(); renderChallenges();
+    document.querySelector(".setcard:last-child").scrollIntoView({ behavior:"smooth", block:"start" });
+  };
+  $("cancelEdit").onclick = renderHome;
+  $("saveWords").onclick = () => {
+    D.sets.forEach((s, i) => {
+      const seen = new Set();
+      s.name = s.name.trim() || `Set ${i + 1}`;
+      s.words = s.words.map(w => ({ w:w.w.trim(), tip:w.tip.trim() })).filter(w => w.w && !seen.has(norm(w.w)) && seen.add(norm(w.w)));
+    });
+    const ids = new Set(D.sets.map(s => s.id));
+    D.challenges.forEach((c, i) => { c.name = c.name.trim() || `Challenge ${i + 1}`; c.setIds = c.setIds.filter(id => ids.has(id)); });
+    S.sets = D.sets; S.challenges = D.challenges; save(); renderHome();
+  };
+
+  // ---------- Practice round ----------
+  let R = null; // { id, src, i, state, items:[{w,tip,setId,status,attempt,tipUsed}] }
+
+  function startRound(words, src){
+    if (!words.length) return;
+    audio(); // unlock sound on this tap
+    R = { id: Date.now(), src, i:0, state:"typing",
+          items: shuffle(words).map(w => ({ w:w.w, tip:w.tip, setId:w.setId, status:"todo", attempt:"", tipUsed:false })) };
+    $("roundLabel").textContent = `${kid().name} · ${srcLabel(src)}`;
+    show("practice");
+    askWord();
+  }
+  $("retryMissed").onclick = () => {
+    const missed = R.items.filter(x => x.status === "bad");
+    startRound(missed, { type:"retry", scope:{ ...scopeOfSrc(R.src) } });
+  };
+  $("doneResults").onclick = () => { const sc = scopeOfSrc(R.src); if (scopeObj(sc)) openResults(sc); else renderHome(); };
+
+  // ---------- Dials: three speedometers on the same 0..N scale ----------
+  const DIALS = [
+    { key:"left",  label:"TO GO", bg:"#151515" },
+    { key:"ok",    label:"RIGHT", bg:"#2f7a55" },
+    { key:"bad",   label:"WRONG", bg:"#c2412d" }
+  ];
+  const A0 = -135, SWEEP = 270, CX = 100, CY = 100;
+  const polar = (r, deg) => { const a = (deg - 90) * Math.PI / 180; return [CX + r * Math.cos(a), CY + r * Math.sin(a)]; };
+  function niceStep(n){ const raw = n / 8; for (const s of [1,2,5,10,15,20,25,50,100]) if (s >= raw) return s; return Math.ceil(raw / 100) * 100; }
+
+  function dialSVG(d, N){
+    const step = niceStep(N), minor = step >= 5 ? step / 5 : (N <= 40 ? 1 : step);
+    let g = `<circle cx="100" cy="100" r="97" fill="#c9c6bf"/><circle cx="100" cy="100" r="92" fill="${d.bg}"/>
+      <circle cx="100" cy="100" r="92" fill="none" stroke="#000" stroke-opacity=".25" stroke-width="3"/>`;
+    const ticks = [];
+    for (let v = 0; v <= N + 1e-9; v += minor) ticks.push(+v.toFixed(3));
+    if (ticks[ticks.length - 1] !== N) ticks.push(N);
+    ticks.forEach(v => {
+      const onStep = Math.abs(v / step - Math.round(v / step)) < 1e-6;
+      const isEnd = v === N && !onStep;
+      const major = onStep || isEnd;
+      const deg = A0 + SWEEP * v / N, [x1,y1] = polar(84, deg), [x2,y2] = polar(major ? 72 : 78, deg);
+      g += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#fff" stroke-width="${major?3:1.5}" stroke-linecap="round" opacity="${major?1:.7}"/>`;
+      if (onStep || (isEnd && N % step >= step / 2)) {
+        const [tx,ty] = polar(60, deg);
+        g += `<text x="${tx}" y="${ty + 5}" text-anchor="middle" font-size="${N >= 100 ? 11 : 14}" font-weight="700" fill="#fff">${Math.round(v)}</text>`;
+      }
+    });
+    g += `<text x="100" y="146" text-anchor="middle" font-size="34" font-weight="800" fill="#fff" class="val">0</text>
+      <text x="100" y="166" text-anchor="middle" font-size="12" font-weight="800" letter-spacing="2" fill="#fff" opacity=".9">${d.label}</text>
+      <g class="needle" style="transform-origin:100px 100px;transform:rotate(${A0}deg)">
+        <path d="M97 104 L100 22 L103 104 Z" fill="#fff"/></g>
+      <circle cx="100" cy="100" r="9" fill="#fff"/><circle cx="100" cy="100" r="4" fill="${d.bg}"/>`;
+    return `<svg viewBox="0 0 200 200" role="img" data-key="${d.key}" aria-label="${d.label}">${g}</svg>`;
+  }
+
+  function drawGauges(el){
+    const N = R.items.length;
+    if (el.dataset.n !== String(N) || el.dataset.r !== String(R.id)) {
+      el.innerHTML = DIALS.map(d => dialSVG(d, N)).join("");
+      el.dataset.n = N; el.dataset.r = R.id;
+      el.getBoundingClientRect(); // so the first move animates from zero
+    }
+    const ok = R.items.filter(x => x.status === "ok").length, bad = R.items.filter(x => x.status === "bad").length;
+    const vals = { left: N - ok - bad, ok, bad };
+    el.querySelectorAll("svg").forEach(svg => {
+      const v = vals[svg.dataset.key];
+      svg.querySelector(".val").textContent = v;
+      svg.setAttribute("aria-label", `${v} ${svg.dataset.key === "left" ? "to go" : svg.dataset.key === "ok" ? "right" : "wrong"} out of ${N}`);
+      requestAnimationFrame(() => { svg.querySelector(".needle").style.transform = `rotate(${A0 + SWEEP * v / N}deg)`; });
+    });
+  }
+
+
+  function askWord(){
+    const x = R.items[R.i];
+    R.state = "typing";
+    const a = $("answer"); a.value = ""; a.className = "spell";
+    $("result").classList.add("hidden"); $("tipBox").classList.add("hidden");
+    $("hint").classList.remove("hidden");
+    // Grey out the tip button when this word has no tip
+    $("getTip").disabled = !(x.tip && x.tip.trim());
+    $("getTip").title = $("getTip").disabled ? "No tip for this word" : "";
+    drawGauges($("gLive"));
+    a.focus();
+    say(x.w);
+  }
+
+  $("hear").onclick = () => { say(R.items[R.i].w); $("answer").focus(); };
+  $("getTip").onclick = () => {
+    const x = R.items[R.i];
+    if (!x.tip) return;
+    if (R.state === "typing") x.tipUsed = true;
+    $("tipBox").classList.remove("hidden");
+    // The tip is spoken, never shown, so it can't simply be copied
+    say(x.tip, 0.9);
+    $("answer").focus();
+  };
+
+  // Typing (including backspace) works normally until return is pressed
+  $("answer").addEventListener("beforeinput", e => { if (R && R.state !== "typing") e.preventDefault(); });
+  $("answer").addEventListener("keydown", e => {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    if (R.state === "typing") check();
+    else if (R.state === "answered") next();
+  });
+
+  function diff(attempt, target){
+    const a = attempt.toLowerCase(), t = target.toLowerCase(), m = a.length, n = t.length;
+    const L = Array.from({length:m+1}, () => new Array(n+1).fill(0));
+    for (let i=m-1;i>=0;i--) for (let j=n-1;j>=0;j--) L[i][j] = a[i]===t[j] ? L[i+1][j+1]+1 : Math.max(L[i+1][j], L[i][j+1]);
+    const tOk = new Array(n).fill(false); let i=0, j=0;
+    while (i<m && j<n){ if (a[i]===t[j]) { tOk[j]=true; i++; j++; } else if (L[i+1][j] >= L[i][j+1]) i++; else j++; }
+    return [...target].map((c,k) => `<span class="${tOk[k]?"":"miss"}">${esc(c)}</span>`).join("");
+  }
+
+
+  function check(){
+    const x = R.items[R.i], a = $("answer"), attempt = a.value.trim();
+    if (!attempt) return;
+    x.attempt = attempt;
+    const ok = norm(attempt) === norm(x.w);
+    x.status = ok ? "ok" : "bad";
+    R.state = "answered";
+    a.className = "spell " + (ok ? "right" : "wrong");
+    $("hint").classList.add("hidden");
+    $("getTip").disabled = true;
+    $("msg").textContent = ok ? (x.tipUsed ? "Correct! The tip helped." : "Correct! 🎉") : "Not quite.";
+    $("msg").style.color = ok ? "var(--green)" : "var(--red)";
+    $("fixWrap").classList.toggle("hidden", ok);
+    try { speechSynthesis.cancel(); } catch(e) {}
+    if (ok) ding();
+    else { $("correct").innerHTML = diff(attempt, x.w); buzz(); setTimeout(() => { if (R.items[R.i] === x && R.state === "answered") say(x.w); }, 700); }
+    $("result").classList.remove("hidden");
+    drawGauges($("gLive"));
+  }
+
+  function next(){
+    if (R.i < R.items.length - 1) { R.i++; askWord(); }
+    else finish();
+  }
+
+  function finish(){
+    const answered = R.items.filter(x => x.status !== "todo");
+    R.state = "done";
+    if (answered.length) {
+      const planned = {};
+      R.items.forEach(x => planned[x.setId] = (planned[x.setId] || 0) + 1);
+      kid().rounds.push({ t: Date.now(), src: R.src, planned,
+        res: answered.map(x => ({ w:x.w, a:x.attempt, ok:x.status==="ok", tip:x.tipUsed, setId:x.setId })) });
+      save();
+    }
+    $("answer").blur();
+    const ok = answered.filter(x => x.status === "ok").length, bad = answered.length - ok;
+    $("doneTitle").textContent = !answered.length ? "Round stopped" : bad === 0 ? "Every one right! 🎉" : "Round finished";
+    $("doneSub").textContent = answered.length ? `${kid().name} got ${ok} out of ${answered.length} right in ${srcLabel(R.src)}.` : "Nothing was answered, so this round wasn't saved.";
+    drawGauges($("gDone"));
+    $("missCard").classList.toggle("hidden", !bad);
+    $("missTable").innerHTML = answered.filter(x => x.status === "bad").map(x =>
+      `<tr><td style="color:var(--red);text-decoration:line-through">${esc(x.attempt)}</td><td><b>${esc(x.w)}</b>${x.tip?`<div class="muted" style="font-size:15px">💡 ${esc(x.tip)}</div>`:""}</td>
+       <td><button class="small secondary" data-say="${esc(x.w)}">🔊</button></td></tr>`).join("");
+    $("retryMissed").classList.toggle("hidden", !bad);
+    show("done");
+  }
+  $("missTable").onclick = e => { const w = e.target.dataset && e.target.dataset.say; if (w) say(w); };
+  $("quit").onclick = async () => { if (await ask("Stop this round? Words already answered will be saved.", { ok:"Stop" })) finish(); };
+  $("home2").onclick = renderHome;
+
+  $("voiceSel").onchange = () => { voice = voices.find(v => v.name === $("voiceSel").value) || voice; S.voiceName = voice && voice.name; save(); renderVoice(); say("because. Big Elephants Can Always Understand Small Elephants."); };
+  $("rate").oninput = () => { S.rate = +$("rate").value; save(); renderVoice(); };
+  $("rate").onchange = () => say("friend");
+  $("testVoice").onclick = () => say("Let's practise our spellings. Your first word is: because.");
+  if ("speechSynthesis" in window) { loadVoices(); try { speechSynthesis.addEventListener("voiceschanged", loadVoices); } catch(e) { speechSynthesis.onvoiceschanged = loadVoices; } }
+  else { $("voiceCard").classList.add("hidden"); }
+
+
+  renderHome();
+})();
+</script>
+</body>
+</html>
