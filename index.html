@@ -105,6 +105,21 @@
   .ctable input.cname{font:inherit;font-size:17px;font-weight:700;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:#fff;min-width:170px;width:100%}
   .ctable button{min-height:40px;padding:0 12px;background:#ece5d6;color:var(--muted);border-radius:10px;font-size:16px}
   input.num{font:inherit;font-size:17px;width:80px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:#fff}
+  .awards{display:flex;flex-wrap:wrap;gap:12px 14px;margin-bottom:6px}
+  .award{width:92px;text-align:center;font-size:13px;font-weight:700;color:var(--muted);line-height:1.25}
+  .award svg{width:66px;height:66px;display:block;margin:0 auto 4px}
+  .award.won{color:var(--ink)}
+  .award.won svg{filter:drop-shadow(0 2px 3px rgba(150,110,10,.35))}
+  .award.fresh svg{animation:wobble 1.2s ease-in-out 2}
+  @keyframes wobble{0%,100%{transform:rotate(0) scale(1)}25%{transform:rotate(-8deg) scale(1.12)}75%{transform:rotate(8deg) scale(1.12)}}
+  #party{position:fixed;inset:0;z-index:20;background:rgba(14,18,34,.86);display:flex;align-items:center;justify-content:center;cursor:pointer}
+  #party canvas{position:absolute;inset:0;width:100%;height:100%}
+  #party .box{position:relative;text-align:center;color:#fff;padding:20px;animation:pop .5s ease-out}
+  #party .box svg{width:150px;height:150px;filter:drop-shadow(0 6px 18px rgba(255,200,60,.55))}
+  #party h1{font-size:38px;margin:10px 0 6px;color:#fff}
+  #party p{font-size:20px;margin:0 0 10px;color:#f6e7b8;font-weight:700}
+  #party .tap{font-size:15px;color:#c9cbe0;font-weight:600}
+  @keyframes pop{0%{transform:scale(.5);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
   .stickybar{position:sticky;bottom:0;background:var(--bg);padding:12px 0;border-top:1px solid var(--line);z-index:5}
 </style>
 </head>
@@ -125,6 +140,16 @@
         <button class="small secondary" id="renameKid">Rename</button>
         <button class="small secondary" id="delKid">Remove</button>
       </div>
+    </div>
+  </div>
+
+  <div class="card" id="awardsCard">
+    <h2>Awards <span class="muted" id="awardsWho" style="font-weight:600;font-size:16px"></span></h2>
+    <div class="label grouplabel">Sets · a gold medal for 100%</div>
+    <div class="awards" id="medals"></div>
+    <div id="cupsWrap">
+      <div class="label grouplabel">Challenges · a gold cup for 100%</div>
+      <div class="awards" id="cups"></div>
     </div>
   </div>
 
@@ -297,6 +322,20 @@
 </section>
 
 </main>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff1a8"/><stop offset=".45" stop-color="#f2c43a"/><stop offset="1" stop-color="#b8860b"/></linearGradient>
+</defs></svg>
+
+<div id="party" class="hidden" role="dialog" aria-live="assertive">
+  <canvas id="fw"></canvas>
+  <div class="box">
+    <div id="partyIcon"></div>
+    <h1 id="partyTitle"></h1>
+    <p id="partySub"></p>
+    <div class="tap">Tap anywhere to carry on</div>
+  </div>
+</div>
 
 <div class="modal hidden" id="modal"><div class="card">
   <h2 id="mTitle"></h2>
@@ -566,12 +605,162 @@
       .sort((a,b) => b.misses - a.misses || a.word.w.localeCompare(b.word.w));
   }
 
+  // ---------- Awards ----------
+  const STAR = (cx, cy, r) => { let d = ""; for (let i = 0; i < 10; i++) { const a = Math.PI / 5 * i - Math.PI / 2, rr = i % 2 ? r * .45 : r; d += (i ? "L" : "M") + (cx + rr * Math.cos(a)).toFixed(1) + "," + (cy + rr * Math.sin(a)).toFixed(1); } return d + "Z"; };
+  function medalSVG(won){
+    const f = won ? "url(#gold)" : "#ddd7ca", st = won ? "#a67c0c" : "#c9c2b3";
+    const r1 = won ? "#c2412d" : "#e6e1d6", r2 = won ? "#2c5d8a" : "#d9d3c6";
+    return `<svg viewBox="0 0 100 100" aria-hidden="true">
+      <path d="M30 2 H48 L58 40 H42 Z" fill="${r1}"/><path d="M70 2 H52 L42 40 H58 Z" fill="${r2}"/>
+      <circle cx="50" cy="64" r="31" fill="${f}" stroke="${st}" stroke-width="3"/>
+      <circle cx="50" cy="64" r="23" fill="none" stroke="${st}" stroke-width="2" opacity=".7"/>
+      <path d="${STAR(50, 65, 15)}" fill="${won ? "#fff6cf" : "#ece8df"}" stroke="${st}" stroke-width="1.5" stroke-linejoin="round"/></svg>`;
+  }
+  function cupSVG(won){
+    const f = won ? "url(#gold)" : "#ddd7ca", st = won ? "#a67c0c" : "#c9c2b3";
+    return `<svg viewBox="0 0 100 100" aria-hidden="true">
+      <path d="M26 20 C8 20 8 46 32 50" fill="none" stroke="${st}" stroke-width="6" stroke-linecap="round"/>
+      <path d="M74 20 C92 20 92 46 68 50" fill="none" stroke="${st}" stroke-width="6" stroke-linecap="round"/>
+      <path d="M22 10 H78 V30 C78 52 64 64 50 64 C36 64 22 52 22 30 Z" fill="${f}" stroke="${st}" stroke-width="3" stroke-linejoin="round"/>
+      <rect x="44" y="63" width="12" height="14" fill="${f}" stroke="${st}" stroke-width="2.5"/>
+      <path d="M30 86 Q30 76 40 76 H60 Q70 76 70 86 Z" fill="${f}" stroke="${st}" stroke-width="2.5"/>
+      <rect x="24" y="86" width="52" height="9" rx="2" fill="${won ? "#5a3d1e" : "#cfc8b9"}"/>
+      <path d="${STAR(50, 34, 12)}" fill="${won ? "#fff6cf" : "#ece8df"}" stroke="${st}" stroke-width="1.5" stroke-linejoin="round"/></svg>`;
+  }
+  // An award is won by a full round with every word right (a challenge round can also win the medal of each set in it)
+  function earnedAwards(k){
+    const out = { set:{}, challenge:{} };
+    S.sets.forEach(s => { const p = graphRounds(k, { type:"set", id:s.id }).find(p => p.total > 0 && p.right === p.total); if (p) out.set[s.id] = p.r.t; });
+    S.challenges.forEach(c => { const p = graphRounds(k, { type:"challenge", id:c.id }).find(p => p.total > 0 && p.right === p.total); if (p) out.challenge[c.id] = p.r.t; });
+    return out;
+  }
+  // A challenge is locked until the child has a gold medal for every set in it
+  function lockedBy(k, chId){
+    const won = earnedAwards(k).set;
+    return scopeSetIds({ type:"challenge", id:chId }).map(setById).filter(s => s.words.length && !won[s.id]);
+  }
+  let freshAwards = new Set();
+  function renderAwards(k){
+    const won = earnedAwards(k);
+    const sets = S.sets.filter(s => s.words.length), chs = S.challenges.filter(c => scopeWords({ type:"challenge", id:c.id }).length);
+    $("awardsCard").classList.toggle("hidden", !sets.length);
+    const total = sets.length + chs.length;
+    const got = sets.filter(s => won.set[s.id]).length + chs.filter(c => won.challenge[c.id]).length;
+    $("awardsWho").textContent = `for ${k.name} · ${got} of ${total}`;
+    const item = (type, o, t) => {
+      const when = t ? new Date(t).toLocaleDateString("en-GB", { day:"numeric", month:"short" }) : "";
+      const label = t ? `${type === "set" ? "Gold medal" : "Gold cup"}: ${o.name}, won ${when}` : `${o.name}: not won yet. Get 100% to win it.`;
+      return `<div class="award ${t ? "won" : ""} ${freshAwards.has(type + o.id) ? "fresh" : ""}" title="${esc(label)}" role="img" aria-label="${esc(label)}">${type === "set" ? medalSVG(!!t) : cupSVG(!!t)}${esc(o.name)}</div>`;
+    };
+    $("medals").innerHTML = sets.map(s => item("set", s, won.set[s.id])).join("");
+    $("cupsWrap").classList.toggle("hidden", !chs.length);
+    $("cups").innerHTML = chs.map(c => item("challenge", c, won.challenge[c.id])).join("");
+    freshAwards = new Set();
+  }
+
+  // ---------- Celebration: fireworks and a cheering crowd ----------
+  let noiseBuf = null;
+  function noise(c){
+    if (noiseBuf) return noiseBuf;
+    noiseBuf = c.createBuffer(1, c.sampleRate * 2, c.sampleRate);
+    const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    return noiseBuf;
+  }
+  function cheer(){
+    const c = audio(); if (!c) return;
+    const t = c.currentTime + .05, dur = 4.6, buf = noise(c);
+    const master = c.createGain(); master.connect(c.destination);
+    master.gain.setValueAtTime(0, t); master.gain.linearRampToValueAtTime(.32, t + .6);
+    master.gain.setValueAtTime(.32, t + 2.6); master.gain.linearRampToValueAtTime(0, t + dur);
+    // The roar of many voices: noise through several vowel-like bands, each wobbling at random
+    [[450,.9],[750,1],[1100,.85],[1700,.6],[2500,.35],[3400,.2]].forEach(([f, w]) => {
+      const src = c.createBufferSource(); src.buffer = buf; src.loop = true; src.playbackRate.value = .85 + Math.random() * .3;
+      const bp = c.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = f; bp.Q.value = 1.4;
+      const g = c.createGain(); g.gain.setValueAtTime(0, t);
+      for (let x = 0; x < dur; x += .07) g.gain.linearRampToValueAtTime(w * (.45 + Math.random() * .9), t + x);
+      src.connect(bp); bp.connect(g); g.connect(master); src.start(t); src.stop(t + dur);
+    });
+    // Clapping
+    const hp = c.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 1300; hp.connect(master);
+    for (let i = 0; i < 70; i++) {
+      const at = t + .3 + Math.random() * (dur - 1.3), s2 = c.createBufferSource(), g = c.createGain();
+      s2.buffer = buf; g.gain.setValueAtTime(.9, at); g.gain.exponentialRampToValueAtTime(.001, at + .05);
+      s2.connect(g); g.connect(hp); s2.start(at, Math.random() * 1.8, .06);
+    }
+    // A couple of whistles
+    [[.5, 1900], [1.6, 2300]].forEach(([d0, f]) => {
+      const o = c.createOscillator(), g = c.createGain(), at = t + d0;
+      o.type = "sine"; o.frequency.setValueAtTime(f * .8, at); o.frequency.linearRampToValueAtTime(f * 1.15, at + .25); o.frequency.linearRampToValueAtTime(f, at + .7);
+      g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(.05, at + .08); g.gain.linearRampToValueAtTime(0, at + .75);
+      o.connect(g); g.connect(master); o.start(at); o.stop(at + .8);
+    });
+  }
+  function boom(){
+    const c = audio(); if (!c) return;
+    const t = c.currentTime, buf = noise(c);
+    const s1 = c.createBufferSource(), lp = c.createBiquadFilter(), g = c.createGain();
+    s1.buffer = buf; lp.type = "lowpass"; lp.frequency.value = 320;
+    g.gain.setValueAtTime(.5, t); g.gain.exponentialRampToValueAtTime(.001, t + .5);
+    s1.connect(lp); lp.connect(g); g.connect(c.destination); s1.start(t, Math.random(), .55);
+    // crackle
+    const hp = c.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 3000; hp.connect(c.destination);
+    for (let i = 0; i < 9; i++) {
+      const at = t + .15 + Math.random() * .6, s2 = c.createBufferSource(), g2 = c.createGain();
+      s2.buffer = buf; g2.gain.setValueAtTime(.12, at); g2.gain.exponentialRampToValueAtTime(.001, at + .03);
+      s2.connect(g2); g2.connect(hp); s2.start(at, Math.random() * 1.8, .035);
+    }
+  }
+
+  let partyStop = null;
+  function celebrate(title, sub, icon){
+    $("partyTitle").textContent = title; $("partySub").textContent = sub; $("partyIcon").innerHTML = icon;
+    $("party").classList.remove("hidden");
+    cheer();
+    const cv = $("fw"), ctx = cv.getContext("2d"), dpr = window.devicePixelRatio || 1;
+    const W = cv.width = innerWidth * dpr, H = cv.height = innerHeight * dpr;
+    const COLS = ["#ffd54a","#ff6b5b","#5ee08f","#6cb8ff","#ffffff","#ff9de2"];
+    const rockets = [], sparks = [];
+    const start = performance.now(); let lastLaunch = 0, raf = 0;
+    const launch = () => rockets.push({ x: W * (.15 + Math.random() * .7), y: H, vx: (Math.random() - .5) * 2 * dpr, vy: -(H / 62) * (.85 + Math.random() * .25), col: COLS[Math.floor(Math.random() * COLS.length)] });
+    function frame(now){
+      const t = now - start;
+      if (t < 3600 && now - lastLaunch > 380) { launch(); if (Math.random() < .4) launch(); lastLaunch = now; }
+      ctx.globalCompositeOperation = "destination-out"; ctx.fillStyle = "rgba(0,0,0,.22)"; ctx.fillRect(0, 0, W, H);
+      ctx.globalCompositeOperation = "lighter";
+      for (let i = rockets.length - 1; i >= 0; i--) {
+        const r = rockets[i]; r.x += r.vx; r.y += r.vy; r.vy += .22 * dpr;
+        ctx.fillStyle = "#ffe9a8"; ctx.beginPath(); ctx.arc(r.x, r.y, 2.5 * dpr, 0, 7); ctx.fill();
+        if (r.vy > -1.5 * dpr) {
+          rockets.splice(i, 1); boom();
+          const n = 70 + Math.random() * 40;
+          for (let j = 0; j < n; j++) { const a = Math.random() * Math.PI * 2, sp = (1 + Math.random() * 5) * dpr;
+            sparks.push({ x:r.x, y:r.y, vx:Math.cos(a) * sp, vy:Math.sin(a) * sp, life:60 + Math.random() * 35, max:95, col: Math.random() < .2 ? "#fff" : r.col }); }
+        }
+      }
+      for (let i = sparks.length - 1; i >= 0; i--) {
+        const p = sparks[i]; p.x += p.vx; p.y += p.vy; p.vx *= .985; p.vy = p.vy * .985 + .05 * dpr; p.life--;
+        if (p.life <= 0) { sparks.splice(i, 1); continue; }
+        ctx.globalAlpha = Math.min(1, p.life / 40); ctx.fillStyle = p.col;
+        ctx.beginPath(); ctx.arc(p.x, p.y, 2 * dpr, 0, 7); ctx.fill(); ctx.globalAlpha = 1;
+      }
+      if (t < 7000 && (t < 3600 || rockets.length || sparks.length)) raf = requestAnimationFrame(frame);
+    }
+    raf = requestAnimationFrame(frame);
+    const close = () => { cancelAnimationFrame(raf); ctx.clearRect(0, 0, W, H); $("party").classList.add("hidden"); clearTimeout(timer); document.removeEventListener("keydown", onKey); partyStop = null; };
+    const onKey = e => { if (e.key === "Enter" || e.key === "Escape" || e.key === " ") { e.preventDefault(); close(); } };
+    const timer = setTimeout(close, 7500);
+    document.addEventListener("keydown", onKey);
+    partyStop = close;
+  }
+  $("party").onclick = () => partyStop && partyStop();
+
   // ---------- Home ----------
   function renderHome(){
     const k = kid();
     $("kids").innerHTML = S.children.map(c => `<button class="chip ${c.id===k.id?"on":""}" data-id="${c.id}">${esc(c.name)}</button>`).join("");
     $("delKid").disabled = S.children.length < 2;
     $("resultsWho").textContent = `for ${k.name}`;
+    renderAwards(k);
 
     const setBtns = S.sets.map(s => {
       const n = s.words.length;
@@ -579,7 +768,9 @@
     }).join("");
     const chBtns = S.challenges.map(c => {
       const n = scopeWords({ type:"challenge", id:c.id }).length;
-      return `<button class="challenge" data-type="challenge" data-id="${c.id}" ${n?"":"disabled"}>🏆 ${esc(c.name)}<small>${plural(n,"spelling")}</small></button>`;
+      const need = lockedBy(k, c.id);
+      const note = need.length ? `🔒 Win the medal for ${need.length > 2 ? plural(need.length, "more set") : need.map(s => s.name).join(" and ")} first` : plural(n, "spelling");
+      return `<button class="challenge" data-type="challenge" data-id="${c.id}" ${n && !need.length ? "" : "disabled"} title="${esc(need.length ? "Locked until you get 100% in: " + need.map(s => s.name).join(", ") : "")}">🏆 ${esc(c.name)}<small>${esc(note)}</small></button>`;
     }).join("");
     const anyWords = S.sets.some(s => s.words.length);
     $("selectBox").innerHTML = !anyWords
@@ -604,6 +795,7 @@
   $("selectBox").onclick = e => {
     const b = e.target.closest("button[data-type]"); if (!b || b.disabled) return;
     const sc = { type:b.dataset.type, id:b.dataset.id };
+    if (sc.type === "challenge" && lockedBy(kid(), sc.id).length) return;
     startRound(scopeWords(sc), { type:sc.type, id:sc.id });
   };
   $("resultsBox").onclick = e => {
@@ -654,7 +846,7 @@
     const nWords = scopeWords(sc).length;
     $("resSub").textContent = `${k.name}'s results · ${plural(nWords, "spelling")}` +
       (sc.type === "challenge" ? ` · sets: ${scopeSetIds(sc).map(id => setById(id).name).join(", ") || "none"}` : "");
-    $("resPlay").disabled = !nWords;
+    $("resPlay").disabled = !nWords || (sc.type === "challenge" && lockedBy(k, sc.id).length > 0);
 
     show("results");
     drawLine(k, sc);
@@ -1008,12 +1200,23 @@
   function finish(){
     const answered = R.items.filter(x => x.status !== "todo");
     R.state = "done";
+    const k = kid(), before = earnedAwards(k);
+    let perfect = null;
     if (answered.length) {
       const planned = {};
       R.items.forEach(x => planned[x.setId] = (planned[x.setId] || 0) + 1);
       kid().rounds.push({ t: Date.now(), src: R.src, planned,
         res: answered.map(x => ({ w:x.w, a:x.attempt, ok:x.status==="ok", tip:x.tipUsed, setId:x.setId })) });
       save();
+      // 100% in a full set or challenge round?
+      const allRight = answered.length === R.items.length && answered.every(x => x.status === "ok");
+      if (allRight && (R.src.type === "set" || R.src.type === "challenge")) {
+        const after = earnedAwards(k);
+        const newMedals = S.sets.filter(s => after.set[s.id] && !before.set[s.id]);
+        const newCup = R.src.type === "challenge" && after.challenge[R.src.id] && !before.challenge[R.src.id];
+        newMedals.forEach(s => freshAwards.add("set" + s.id)); if (newCup) freshAwards.add("challenge" + R.src.id);
+        perfect = { newMedals, newCup };
+      }
     }
     $("answer").blur();
     const ok = answered.filter(x => x.status === "ok").length, bad = answered.length - ok;
@@ -1026,6 +1229,14 @@
        <td><button class="small secondary" data-say="${esc(x.w)}">🔊</button></td></tr>`).join("");
     $("retryMissed").classList.toggle("hidden", !bad);
     show("done");
+    if (perfect) {
+      const isCh = R.src.type === "challenge", name = srcLabel(R.src);
+      const bits = [];
+      if (perfect.newCup) bits.push("You've won the gold cup!");
+      if (perfect.newMedals.length) bits.push(perfect.newMedals.length === 1 && !isCh ? "You've won the gold medal!" : `New gold medal${perfect.newMedals.length > 1 ? "s" : ""}: ${perfect.newMedals.map(s => s.name).join(", ")}`);
+      if (!bits.length) bits.push(`Every word right again, ${k.name}!`);
+      setTimeout(() => celebrate(`100% in ${name}!`, bits.join("  ·  "), isCh ? cupSVG(true) : medalSVG(true)), 700);
+    }
   }
   $("missTable").onclick = e => { const w = e.target.dataset && e.target.dataset.say; if (w) say(w); };
   $("quit").onclick = async () => { if (await ask("Stop this round? Words already answered will be saved.", { ok:"Stop" })) finish(); };
