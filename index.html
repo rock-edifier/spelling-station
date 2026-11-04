@@ -964,7 +964,8 @@
       return;
     }
     try {
-      const blob = new Blob([exportText()], { type:"application/json" });
+      // "octet-stream" makes Safari on iPad save the file rather than open it as a page
+      const blob = new Blob([exportText()], { type:"application/octet-stream" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob); a.download = exportName();
       document.body.appendChild(a); a.click(); a.remove();
@@ -990,9 +991,36 @@
 
   // Read and check a file's contents
   let pending = null;
+  // Find the spelling data even if the file was re-saved, wrapped in a web page, or had its quote marks "smartened"
+  function extractData(raw){
+    let text = String(raw || "").replace(/^\uFEFF/, "").replace(/\u0000/g, "");
+    const tryParse = t => { try { return JSON.parse(t); } catch(e) { return undefined; } };
+    const straighten = t => t.replace(/[“”„‟″]/g, '"').replace(/[‘’‚‛]/g, "'").replace(/\u00A0/g, " ");
+    // Pull out the {...} block that starts with "app": by matching braces
+    const block = t => {
+      const start = t.search(/\{\s*"app"\s*:/); if (start < 0) return null;
+      let depth = 0, inStr = false, esc = false;
+      for (let i = start; i < t.length; i++) {
+        const ch = t[i];
+        if (inStr) { if (esc) esc = false; else if (ch === "\\") esc = true; else if (ch === '"') inStr = false; continue; }
+        if (ch === '"') inStr = true; else if (ch === "{") depth++; else if (ch === "}") { depth--; if (depth === 0) return t.slice(start, i + 1); }
+      }
+      return null;
+    };
+    for (const t of [text, straighten(text)]) {
+      let d = tryParse(t.trim()); if (d !== undefined) return d;
+      const b = block(t); if (b) { d = tryParse(b); if (d !== undefined) return d; }
+    }
+    // Explain what we found instead
+    const head = text.trim().slice(0, 60);
+    if (!text.trim()) throw new Error("That file is empty. Try exporting the spellings again.");
+    if (/^%PDF/.test(head)) throw new Error("That file is a PDF, not a spelling file. On the other device use “Download file” or “Copy as text” instead of printing or saving the page.");
+    if (/^\{\\rtf/.test(head)) throw new Error("That file was re-saved as a formatted document, which scrambles it. Use “Copy as text” on the other device and paste it here instead.");
+    if (/^bplist|^</i.test(head)) throw new Error("That file was saved as a web page, so the spelling list couldn't be found inside it. Use “Copy as text” on the other device and paste it here instead.");
+    throw new Error(`That doesn't look like a Spelling Station file. (It starts with: “${head.replace(/\s+/g, " ").slice(0, 40)}…”)`);
+  }
   function parseImport(text){
-    let d;
-    try { d = JSON.parse(text); } catch(e) { throw new Error("That doesn't look like a Spelling Station file."); }
+    const d = extractData(text);
     if (!d || !Array.isArray(d.sets)) throw new Error("That file doesn't contain any spelling sets.");
     const str = (v, max) => String(v == null ? "" : v).slice(0, max).trim();
     const sets = d.sets.map((s, i) => ({
