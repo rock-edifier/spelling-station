@@ -1,0 +1,613 @@
+{
+  "app": "Spelling Station",
+  "kind": "spelling-lists",
+  "version": 1,
+  "exported": "2026-11-04T14:39:53.416Z",
+  "sets": [
+    {
+      "id": "efyiysz",
+      "name": "Term 1 > Set 1 > Week 1",
+      "words": [
+        {
+          "word": "regret",
+          "tip": ""
+        },
+        {
+          "word": "regretting",
+          "tip": ""
+        },
+        {
+          "word": "regretted",
+          "tip": ""
+        },
+        {
+          "word": "limit",
+          "tip": ""
+        },
+        {
+          "word": "limiting",
+          "tip": ""
+        },
+        {
+          "word": "limited",
+          "tip": ""
+        },
+        {
+          "word": "occurrence",
+          "tip": ""
+        },
+        {
+          "word": "budgeted",
+          "tip": "When I say budgeted, you think \"Bud\" \"Get\" \"Ed\""
+        },
+        {
+          "word": "accidentally",
+          "tip": ""
+        },
+        {
+          "word": "actually",
+          "tip": "When I say actually, you think \"Act\" \"you\" \"all\" \"e\""
+        }
+      ]
+    },
+    {
+      "id": "agic7ml",
+      "name": "Term 1 > Set 1 > Week 2",
+      "words": [
+        {
+          "word": "commit",
+          "tip": ""
+        },
+        {
+          "word": "committing",
+          "tip": ""
+        },
+        {
+          "word": "committed",
+          "tip": ""
+        },
+        {
+          "word": "fidget",
+          "tip": ""
+        },
+        {
+          "word": "fidgeting",
+          "tip": ""
+        },
+        {
+          "word": "fidgeted",
+          "tip": ""
+        },
+        {
+          "word": "regrettable",
+          "tip": ""
+        },
+        {
+          "word": "benefitted",
+          "tip": ""
+        },
+        {
+          "word": "believe",
+          "tip": ""
+        },
+        {
+          "word": "bicycle",
+          "tip": ""
+        }
+      ]
+    },
+    {
+      "id": "on8195x",
+      "name": "Term 1 > Set 1 > Week 3",
+      "words": [
+        {
+          "word": "refer",
+          "tip": ""
+        },
+        {
+          "word": "referring",
+          "tip": ""
+        },
+        {
+          "word": "referred",
+          "tip": ""
+        },
+        {
+          "word": "fasten",
+          "tip": ""
+        },
+        {
+          "word": "fastening",
+          "tip": ""
+        },
+        {
+          "word": "fastened",
+          "tip": ""
+        },
+        {
+          "word": "forgettable",
+          "tip": ""
+        },
+        {
+          "word": "focused",
+          "tip": ""
+        },
+        {
+          "word": "breathe",
+          "tip": ""
+        },
+        {
+          "word": "business",
+          "tip": "When I say business, you spell \"Bus\" \"eye\" \"ness\""
+        }
+      ]
+    },
+    {
+      "id": "q7voene",
+      "name": "Term 1 > Set 1 > Week 4",
+      "words": [
+        {
+          "word": "admit",
+          "tip": ""
+        },
+        {
+          "word": "admitting",
+          "tip": ""
+        },
+        {
+          "word": "admitted",
+          "tip": ""
+        },
+        {
+          "word": "offer",
+          "tip": ""
+        },
+        {
+          "word": "offering",
+          "tip": ""
+        },
+        {
+          "word": "offered",
+          "tip": ""
+        },
+        {
+          "word": "forbidden",
+          "tip": ""
+        },
+        {
+          "word": "preference",
+          "tip": "When I say preference, you spell\"prefer\" \"ence\""
+        },
+        {
+          "word": "caught",
+          "tip": "Caught as in \"I caught a fish\""
+        },
+        {
+          "word": "century",
+          "tip": "When I say \"century\" you spell \"cent\" \"yuri\""
+        }
+      ]
+    },
+    {
+      "id": "5g920v0",
+      "name": "Term 1 > Set 2 > Week 5",
+      "words": [
+        {
+          "word": "legal",
+          "tip": "When I say \"lee-gal\" you spell \"leg-al\""
+        },
+        {
+          "word": "illegal",
+          "tip": ""
+        },
+        {
+          "word": "mature",
+          "tip": "Think of nature"
+        },
+        {
+          "word": "immature",
+          "tip": ""
+        },
+        {
+          "word": "regular",
+          "tip": ""
+        },
+        {
+          "word": "irregular",
+          "tip": ""
+        },
+        {
+          "word": "illegitimate",
+          "tip": "When I say illegitimate, you spell Leg-it-i-mate"
+        },
+        {
+          "word": "illimitable",
+          "tip": "First spell \"limit\", then spell \"able\", then add \"il\""
+        },
+        {
+          "word": "certain",
+          "tip": "\"tain\" is spelt like \"rain\", \"pain\", \"main\""
+        },
+        {
+          "word": "consider",
+          "tip": ""
+        }
+      ]
+    },
+    {
+      "id": "18x5nyu",
+      "name": "Term 1 > Set 2 > Week 6",
+      "words": [
+        {
+          "word": "logical",
+          "tip": ""
+        },
+        {
+          "word": "illogical",
+          "tip": ""
+        },
+        {
+          "word": "possible",
+          "tip": "Poss as in moss or loss"
+        },
+        {
+          "word": "impossible",
+          "tip": "Poss as in moss or loss"
+        },
+        {
+          "word": "responsible",
+          "tip": ""
+        },
+        {
+          "word": "irresponsible",
+          "tip": ""
+        },
+        {
+          "word": "irrational",
+          "tip": "For ration think of Rat and Lion"
+        },
+        {
+          "word": "irrefutable",
+          "tip": "When I say irrefutable, you spell eerie-fut-able"
+        },
+        {
+          "word": "continue",
+          "tip": ""
+        },
+        {
+          "word": "different",
+          "tip": "Different comes from the verb \"to differ\""
+        }
+      ]
+    },
+    {
+      "id": "dhpbn1e",
+      "name": "Term 1 > Set 2 > Week 7",
+      "words": [
+        {
+          "word": "legible",
+          "tip": "When I say legible, you spell leg-ible"
+        },
+        {
+          "word": "illegible",
+          "tip": ""
+        },
+        {
+          "word": "patient",
+          "tip": "When I say patient, you spell Pat-eye-ent"
+        },
+        {
+          "word": "impatient",
+          "tip": "When I say patient, you spell Pat-eye-ent"
+        },
+        {
+          "word": "relevant",
+          "tip": "When I say relly you think of telly like television"
+        },
+        {
+          "word": "irrelevant",
+          "tip": "When I say relly you think of telly like television"
+        },
+        {
+          "word": "imprecise",
+          "tip": "You think it would be spelled \"S\" \"ice\" but the letters need to be swapped"
+        },
+        {
+          "word": "eighth",
+          "tip": "Think of old mcdonald's farm and it ends with th"
+        },
+        {
+          "word": "experience",
+          "tip": "\"I\" know that experts have experience"
+        },
+        {
+          "word": "improbable",
+          "tip": ""
+        }
+      ]
+    },
+    {
+      "id": "blekucr",
+      "name": "Term 1 > Set 2 > Week 8",
+      "words": [
+        {
+          "word": "literate",
+          "tip": ""
+        },
+        {
+          "word": "illiterate",
+          "tip": ""
+        },
+        {
+          "word": "polite",
+          "tip": "It's not polite to bite"
+        },
+        {
+          "word": "impolite",
+          "tip": "It's not polite to bite"
+        },
+        {
+          "word": "replaceable",
+          "tip": ""
+        },
+        {
+          "word": "irreplaceable",
+          "tip": ""
+        },
+        {
+          "word": "immovable",
+          "tip": ""
+        },
+        {
+          "word": "immortal",
+          "tip": ""
+        },
+        {
+          "word": "experiment",
+          "tip": "\"I\" know that experts do experiments"
+        },
+        {
+          "word": "extreme",
+          "tip": "When I say extreme, you spell \"ex\" \"trem\" \"e\""
+        }
+      ]
+    },
+    {
+      "id": "yz43ypd",
+      "name": "Term 1 > Set 3 > Week 9",
+      "words": [
+        {
+          "word": "subway",
+          "tip": ""
+        },
+        {
+          "word": "intercity",
+          "tip": ""
+        },
+        {
+          "word": "anticlockwise",
+          "tip": ""
+        },
+        {
+          "word": "autograph",
+          "tip": ""
+        },
+        {
+          "word": "information",
+          "tip": "When I say information, you spell \"in\" \"for\" \"mat\" \"ion\""
+        },
+        {
+          "word": "admiration",
+          "tip": "Think of \"Admire\" then add ration"
+        },
+        {
+          "word": "subdivide",
+          "tip": ""
+        },
+        {
+          "word": "antihero",
+          "tip": ""
+        },
+        {
+          "word": "favourite",
+          "tip": ""
+        },
+        {
+          "word": "guard",
+          "tip": "One soldier said to the other \"gee\" \"you\" \"ard\""
+        }
+      ]
+    },
+    {
+      "id": "5cshgpa",
+      "name": "Term 1 > Set 3 > Week 10",
+      "words": [
+        {
+          "word": "submarine",
+          "tip": ""
+        },
+        {
+          "word": "interact",
+          "tip": ""
+        },
+        {
+          "word": "antiseptic",
+          "tip": ""
+        },
+        {
+          "word": "autobiography",
+          "tip": ""
+        },
+        {
+          "word": "adoration",
+          "tip": ""
+        },
+        {
+          "word": "conversation",
+          "tip": ""
+        },
+        {
+          "word": "interrelated",
+          "tip": ""
+        },
+        {
+          "word": "anticlimax",
+          "tip": ""
+        },
+        {
+          "word": "guide",
+          "tip": ""
+        },
+        {
+          "word": "height",
+          "tip": "When I say height, you spell h and then eight"
+        }
+      ]
+    },
+    {
+      "id": "l1ebk6e",
+      "name": "Term 1 > Set 3 > Week 11",
+      "words": [
+        {
+          "word": "subheading",
+          "tip": ""
+        },
+        {
+          "word": "international",
+          "tip": "Nation is spelled like ration"
+        },
+        {
+          "word": "antisocial",
+          "tip": "When I say social, you spell \"sock\" \"eye\" \"al\""
+        },
+        {
+          "word": "automobile",
+          "tip": "When I say mobeel you spell \"mob\" \"I'll\""
+        },
+        {
+          "word": "sensation",
+          "tip": "Sation is spelled like ration"
+        },
+        {
+          "word": "imagination",
+          "tip": ""
+        },
+        {
+          "word": "intervene",
+          "tip": ""
+        },
+        {
+          "word": "autopilot",
+          "tip": ""
+        },
+        {
+          "word": "imagine",
+          "tip": "When I saw imagine, you think of image fine"
+        },
+        {
+          "word": "increase",
+          "tip": ""
+        }
+      ]
+    },
+    {
+      "id": "u4hnqle",
+      "name": "Term 1 > Set 3 > Week 12",
+      "words": [
+        {
+          "word": "submerge",
+          "tip": ""
+        },
+        {
+          "word": "interchange",
+          "tip": ""
+        },
+        {
+          "word": "antifreeze",
+          "tip": ""
+        },
+        {
+          "word": "automatic",
+          "tip": ""
+        },
+        {
+          "word": "preparation",
+          "tip": "When I say preparation, you think prepare ration"
+        },
+        {
+          "word": "organisation",
+          "tip": ""
+        },
+        {
+          "word": "confrontation",
+          "tip": ""
+        },
+        {
+          "word": "temptation",
+          "tip": ""
+        },
+        {
+          "word": "interest",
+          "tip": ""
+        },
+        {
+          "word": "knowledge",
+          "tip": "When I say knowledge, you spell \"know\" \"ledge\""
+        }
+      ]
+    }
+  ],
+  "challenges": [
+    {
+      "id": "61rbf8l",
+      "name": "Set 1 challenge",
+      "sets": [
+        "efyiysz",
+        "agic7ml",
+        "on8195x",
+        "q7voene"
+      ]
+    },
+    {
+      "id": "2bwczon",
+      "name": "Set 2 challenge",
+      "sets": [
+        "5g920v0",
+        "18x5nyu",
+        "dhpbn1e",
+        "blekucr"
+      ]
+    },
+    {
+      "id": "n127hkx",
+      "name": "Set 3 challenge",
+      "sets": [
+        "u4hnqle",
+        "l1ebk6e",
+        "5cshgpa",
+        "yz43ypd"
+      ]
+    },
+    {
+      "id": "n3wkile",
+      "name": "Term 1 challenge",
+      "sets": [
+        "efyiysz",
+        "agic7ml",
+        "on8195x",
+        "q7voene",
+        "5g920v0",
+        "18x5nyu",
+        "dhpbn1e",
+        "yz43ypd",
+        "5cshgpa",
+        "l1ebk6e",
+        "u4hnqle",
+        "blekucr"
+      ]
+    }
+  ],
+  "dictionaryWords": [
+    "benefitted"
+  ]
+}
