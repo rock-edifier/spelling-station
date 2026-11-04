@@ -996,9 +996,13 @@
     let text = String(raw || "").replace(/^\uFEFF/, "").replace(/\u0000/g, "");
     const tryParse = t => { try { return JSON.parse(t); } catch(e) { return undefined; } };
     const straighten = t => t.replace(/[“”„‟″]/g, '"').replace(/[‘’‚‛]/g, "'").replace(/\u00A0/g, " ");
+    // Undo web-page encoding (&quot; etc.) and remove tags, in case the list was saved inside a page
+    const unpage = t => t.replace(/<[^>]*>/g, " ").replace(/&quot;|&#34;|&#x22;/gi, '"').replace(/&#39;|&#x27;|&apos;/gi, "'")
+      .replace(/&lt;/gi, "<").replace(/&gt;/gi, ">").replace(/&nbsp;/gi, " ").replace(/&amp;/gi, "&");
     // Pull out the {...} block that starts with "app": by matching braces
     const block = t => {
-      const start = t.search(/\{\s*"app"\s*:/); if (start < 0) return null;
+      let start = t.search(/\{\s*"app"\s*:/);
+      if (start < 0) { const k = t.search(/"sets"\s*:\s*\[/); if (k < 0) return null; start = t.lastIndexOf("{", k); if (start < 0) return null; }
       let depth = 0, inStr = false, esc = false;
       for (let i = start; i < t.length; i++) {
         const ch = t[i];
@@ -1007,7 +1011,7 @@
       }
       return null;
     };
-    for (const t of [text, straighten(text)]) {
+    for (const t of [text, straighten(text), unpage(text), straighten(unpage(text))]) {
       let d = tryParse(t.trim()); if (d !== undefined) return d;
       const b = block(t); if (b) { d = tryParse(b); if (d !== undefined) return d; }
     }
@@ -1016,6 +1020,8 @@
     if (!text.trim()) throw new Error("That file is empty. Try exporting the spellings again.");
     if (/^%PDF/.test(head)) throw new Error("That file is a PDF, not a spelling file. On the other device use “Download file” or “Copy as text” instead of printing or saving the page.");
     if (/^\{\\rtf/.test(head)) throw new Error("That file was re-saved as a formatted document, which scrambles it. Use “Copy as text” on the other device and paste it here instead.");
+    if (/Spelling Station/.test(text) && /id="dictWords"|class="grid"|id="gridBox"/.test(text))
+      throw new Error("That file is a saved copy of the Spelling Station app itself, not an exported spelling list. On the device with the spellings, open Settings → Share spellings and use “Copy as text” (or “Download file”).");
     if (/^bplist|^</i.test(head)) throw new Error("That file was saved as a web page, so the spelling list couldn't be found inside it. Use “Copy as text” on the other device and paste it here instead.");
     throw new Error(`That doesn't look like a Spelling Station file. (It starts with: “${head.replace(/\s+/g, " ").slice(0, 40)}…”)`);
   }
