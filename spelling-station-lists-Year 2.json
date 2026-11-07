@@ -1,0 +1,258 @@
+{
+  "app": "Spelling Station",
+  "kind": "spelling-lists",
+  "version": 1,
+  "exported": "2026-11-07T14:07:38.139Z",
+  "sets": [
+    {
+      "id": "if3f9w9",
+      "name": "Term 1 > Week 7",
+      "words": [
+        {
+          "word": "Front",
+          "tip": ""
+        },
+        {
+          "word": "Glove",
+          "tip": ""
+        },
+        {
+          "word": "London",
+          "tip": ""
+        },
+        {
+          "word": "wash",
+          "tip": ""
+        },
+        {
+          "word": "want",
+          "tip": ""
+        },
+        {
+          "word": "watch",
+          "tip": ""
+        },
+        {
+          "word": "ball",
+          "tip": ""
+        },
+        {
+          "word": "talk",
+          "tip": ""
+        },
+        {
+          "word": "stall",
+          "tip": ""
+        },
+        {
+          "word": "oven",
+          "tip": ""
+        },
+        {
+          "word": "month",
+          "tip": ""
+        },
+        {
+          "word": "other",
+          "tip": ""
+        }
+      ]
+    },
+    {
+      "id": "kqdfa1w",
+      "name": "Term 1 > Week 8",
+      "words": [
+        {
+          "word": "Treasure",
+          "tip": ""
+        },
+        {
+          "word": "Usual",
+          "tip": ""
+        },
+        {
+          "word": "Measure",
+          "tip": ""
+        },
+        {
+          "word": "Decision",
+          "tip": ""
+        },
+        {
+          "word": "Version",
+          "tip": ""
+        },
+        {
+          "word": "Confusion",
+          "tip": ""
+        },
+        {
+          "word": "Blue",
+          "tip": ""
+        },
+        {
+          "word": "blew",
+          "tip": ""
+        },
+        {
+          "word": "night",
+          "tip": "opposite of day"
+        },
+        {
+          "word": "knight",
+          "tip": "Fights dragons"
+        },
+        {
+          "word": "quiet",
+          "tip": ""
+        },
+        {
+          "word": "quite",
+          "tip": ""
+        }
+      ]
+    },
+    {
+      "id": "8lfvtdk",
+      "name": "Term 1 > Week 9",
+      "words": [
+        {
+          "word": "worst",
+          "tip": ""
+        },
+        {
+          "word": "work",
+          "tip": ""
+        },
+        {
+          "word": "worthy",
+          "tip": ""
+        },
+        {
+          "word": "toward",
+          "tip": ""
+        },
+        {
+          "word": "reward",
+          "tip": ""
+        },
+        {
+          "word": "wardrobe",
+          "tip": ""
+        },
+        {
+          "word": "pair",
+          "tip": "a pair of socks"
+        },
+        {
+          "word": "pear",
+          "tip": "the fruit"
+        },
+        {
+          "word": "two",
+          "tip": "the number two"
+        },
+        {
+          "word": "to",
+          "tip": "go to the train station"
+        },
+        {
+          "word": "be",
+          "tip": "I will be there"
+        },
+        {
+          "word": "bee",
+          "tip": "makes honey"
+        }
+      ]
+    },
+    {
+      "id": "7h3tsbd",
+      "name": "Term 1 > Week 10",
+      "words": [
+        {
+          "word": "Huge",
+          "tip": ""
+        },
+        {
+          "word": "Gentle",
+          "tip": ""
+        },
+        {
+          "word": "Logic",
+          "tip": ""
+        },
+        {
+          "word": "Assign",
+          "tip": ""
+        },
+        {
+          "word": "Resign",
+          "tip": ""
+        },
+        {
+          "word": "Campaign",
+          "tip": ""
+        },
+        {
+          "word": "Twice",
+          "tip": ""
+        },
+        {
+          "word": "Place",
+          "tip": ""
+        },
+        {
+          "word": "fancy",
+          "tip": ""
+        }
+      ]
+    },
+    {
+      "id": "g8k4n21",
+      "name": "Term 1 > Week 11",
+      "words": [
+        {
+          "word": "Range",
+          "tip": ""
+        },
+        {
+          "word": "Verge",
+          "tip": ""
+        },
+        {
+          "word": "Exchange",
+          "tip": ""
+        },
+        {
+          "word": "Knew",
+          "tip": ""
+        },
+        {
+          "word": "Known",
+          "tip": ""
+        },
+        {
+          "word": "Kneel",
+          "tip": ""
+        },
+        {
+          "word": "Trolley",
+          "tip": ""
+        },
+        {
+          "word": "Turkey",
+          "tip": ""
+        },
+        {
+          "word": "journey",
+          "tip": ""
+        }
+      ]
+    }
+  ],
+  "challenges": [],
+  "dictionaryWords": [
+    "benefitted"
+  ]
+}
