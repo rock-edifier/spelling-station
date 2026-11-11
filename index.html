@@ -174,6 +174,7 @@
   .impbox{background:#eef3f8;border-radius:12px;padding:14px;margin-top:14px}
   .impmsg{margin-top:12px;border-radius:10px;padding:10px 14px;font-size:15px;font-weight:600;background:var(--green-soft);color:#1d5139}
   .impmsg.err{background:var(--red-soft);color:#7a2618}
+  .nodict{text-align:center;font-weight:800;color:#8a5a00;background:#fff1cc;border-radius:12px;padding:10px 14px;margin:10px 0 0}
   .stickybar{position:sticky;bottom:0;background:var(--bg);padding:12px 0;border-top:1px solid var(--line);z-index:5}
 </style>
 </head>
@@ -400,6 +401,7 @@
     </div>
     <input class="spell" id="answer" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done" aria-label="Type the spelling">
     <p class="hint" id="hint">Type the word, then press <b>return</b>.</p>
+    <p class="nodict hidden" id="noDictate">✋ Type it one letter at a time. Talking it in or pasting doesn't count!</p>
     <div class="tipnote hidden" id="tipBox">💡 Listen to the tip. Tap “Hear a tip” to hear it again.</div>
     <div class="result hidden" id="result">
       <div class="msg" id="msg"></div>
@@ -1552,7 +1554,8 @@
   function askWord(){
     const x = R.items[R.i];
     R.state = "typing";
-    const a = $("answer"); a.value = ""; a.className = "spell";
+    const a = $("answer"); a.value = ""; a.className = "spell"; lastTyped = "";
+    $("noDictate").classList.add("hidden");
     $("result").classList.add("hidden"); $("tipBox").classList.add("hidden");
     $("hint").classList.remove("hidden");
     // Grey out the tip button when this word has no tip
@@ -1577,7 +1580,28 @@
   };
 
   // Typing (including backspace) works normally until return is pressed
-  $("answer").addEventListener("beforeinput", e => { if (R && R.state !== "typing") e.preventDefault(); });
+  // Letters must be typed one at a time. Dictation, pasting, dragging and tapping a predicted word all
+  // drop in several letters at once, so those are blocked.
+  let lastTyped = "", noDictTimer = null;
+  function blockedInput(){
+    $("noDictate").classList.remove("hidden");
+    clearTimeout(noDictTimer); noDictTimer = setTimeout(() => $("noDictate").classList.add("hidden"), 3500);
+  }
+  $("answer").addEventListener("beforeinput", e => {
+    if (R && R.state !== "typing") { e.preventDefault(); return; }
+    const t = e.inputType || "";
+    if (/^insertFrom(Paste|Drop|Dictation|YankAndKill)|^insertReplacementText$/.test(t) || (/^insert/.test(t) && e.data && e.data.length > 1)) {
+      e.preventDefault(); blockedInput();
+    }
+  });
+  // Safety net for anything that slips past the check above (e.g. dictation that fills the box directly)
+  $("answer").addEventListener("input", e => {
+    if (!R || R.state !== "typing") return;
+    const v = $("answer").value;
+    if (v.length - lastTyped.length > 1) { $("answer").value = lastTyped; blockedInput(); }
+    else lastTyped = v;
+  });
+  ["paste", "drop"].forEach(ev => $("answer").addEventListener(ev, e => { e.preventDefault(); blockedInput(); }));
   $("answer").addEventListener("keydown", e => {
     if (e.key !== "Enter") return;
     e.preventDefault();
