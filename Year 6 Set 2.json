@@ -1,0 +1,203 @@
+{
+  "app": "Spelling Station",
+  "kind": "spelling-lists",
+  "version": 1,
+  "exported": "2026-11-15T07:01:31.570Z",
+  "sets": [
+    {
+      "id": "dv8tmya",
+      "name": "Term 1 > Set 2 > Week 5",
+      "words": [
+        {
+          "word": "Observe",
+          "tip": ""
+        },
+        {
+          "word": "Observation",
+          "tip": ""
+        },
+        {
+          "word": "Observant",
+          "tip": ""
+        },
+        {
+          "word": "Observance",
+          "tip": ""
+        },
+        {
+          "word": "Patient",
+          "tip": "When I say patient, you spell “pat” “eye” “ent”"
+        },
+        {
+          "word": "Patience",
+          "tip": "When I say patience, you spell “pat” “eye” “ence”"
+        },
+        {
+          "word": "Assistant",
+          "tip": ""
+        },
+        {
+          "word": "Assistance",
+          "tip": ""
+        },
+        {
+          "word": "Communicate",
+          "tip": ""
+        },
+        {
+          "word": "Controversy",
+          "tip": ""
+        }
+      ]
+    },
+    {
+      "id": "gi7d3hh",
+      "name": "Term 1 > Set 2 > Week 6",
+      "words": [
+        {
+          "word": "Expect",
+          "tip": ""
+        },
+        {
+          "word": "Expectation",
+          "tip": ""
+        },
+        {
+          "word": "Expectant",
+          "tip": ""
+        },
+        {
+          "word": "Expectancy",
+          "tip": ""
+        },
+        {
+          "word": "Efficient",
+          "tip": ""
+        },
+        {
+          "word": "Efficiency",
+          "tip": ""
+        },
+        {
+          "word": "Obedient",
+          "tip": ""
+        },
+        {
+          "word": "Obedience",
+          "tip": ""
+        },
+        {
+          "word": "Conscience",
+          "tip": "When I say conscience, you spell “con” “science”"
+        },
+        {
+          "word": "conscious",
+          "tip": ""
+        }
+      ]
+    },
+    {
+      "id": "ph23e6r",
+      "name": "Term 1 > Set 2 > Week 7",
+      "words": [
+        {
+          "word": "Hesitate",
+          "tip": ""
+        },
+        {
+          "word": "Hesitation",
+          "tip": ""
+        },
+        {
+          "word": "Hesitant",
+          "tip": ""
+        },
+        {
+          "word": "Hesitancy",
+          "tip": ""
+        },
+        {
+          "word": "Transparent",
+          "tip": ""
+        },
+        {
+          "word": "Independent",
+          "tip": ""
+        },
+        {
+          "word": "Independence",
+          "tip": ""
+        },
+        {
+          "word": "Convenience",
+          "tip": ""
+        },
+        {
+          "word": "Correspond",
+          "tip": ""
+        }
+      ]
+    },
+    {
+      "id": "yton8u9",
+      "name": "Term 1 > Set 2 > Week 8",
+      "words": [
+        {
+          "word": "Dominate",
+          "tip": ""
+        },
+        {
+          "word": "Domination",
+          "tip": ""
+        },
+        {
+          "word": "Dominant",
+          "tip": ""
+        },
+        {
+          "word": "Dominance",
+          "tip": ""
+        },
+        {
+          "word": "Frequent",
+          "tip": ""
+        },
+        {
+          "word": "Frequency",
+          "tip": ""
+        },
+        {
+          "word": "Consistent",
+          "tip": ""
+        },
+        {
+          "word": "Consistency",
+          "tip": ""
+        },
+        {
+          "word": "Criticise",
+          "tip": ""
+        },
+        {
+          "word": "Curiosity",
+          "tip": ""
+        }
+      ]
+    }
+  ],
+  "challenges": [
+    {
+      "id": "k7ultoi",
+      "name": "Term 1 > Set 2",
+      "sets": [
+        "dv8tmya",
+        "gi7d3hh",
+        "ph23e6r",
+        "yton8u9"
+      ]
+    }
+  ],
+  "dictionaryWords": [
+    "benefitted"
+  ]
+}
