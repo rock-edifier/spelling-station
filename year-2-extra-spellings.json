@@ -1,0 +1,585 @@
+{
+  "app": "Spelling Station",
+  "kind": "spelling-lists",
+  "version": 1,
+  "exported": "2026-11-23T12:28:44.429044+00:00",
+  "sets": [
+    {
+      "id": "y2extra-01",
+      "name": "Y2 Extra 1: d g e endings",
+      "words": [
+        {
+          "word": "badge",
+          "tip": "Short a sound, so the j sound at the end is d, g, e."
+        },
+        {
+          "word": "edge",
+          "tip": "Just four letters. Short e, then d, g, e."
+        },
+        {
+          "word": "bridge",
+          "tip": "After a short i sound, the j sound is d, g, e."
+        },
+        {
+          "word": "fudge",
+          "tip": "Short u sound, then d, g, e. Yummy!"
+        },
+        {
+          "word": "hedge",
+          "tip": "Like edge, with an h at the front."
+        },
+        {
+          "word": "ledge",
+          "tip": "Like edge, with an l at the front."
+        },
+        {
+          "word": "judge",
+          "tip": "It starts with j and ends with d, g, e."
+        },
+        {
+          "word": "nudge",
+          "tip": "Rhymes with fudge. Short u, then d, g, e."
+        },
+        {
+          "word": "dodge",
+          "tip": "Short o sound, then d, g, e."
+        },
+        {
+          "word": "fridge",
+          "tip": "Like bridge, but it starts with f, r."
+        }
+      ]
+    },
+    {
+      "id": "y2extra-02",
+      "name": "Y2 Extra 2: soft g",
+      "words": [
+        {
+          "word": "age",
+          "tip": "Long a sound. The g says j because an e follows it."
+        },
+        {
+          "word": "huge",
+          "tip": "h, u, then g, e. The e makes the g soft."
+        },
+        {
+          "word": "change",
+          "tip": "Starts with c, h. Ends with n, g, e."
+        },
+        {
+          "word": "charge",
+          "tip": "Car with a ch: ch, a, r, then g, e."
+        },
+        {
+          "word": "large",
+          "tip": "l, a, r, then g, e at the end."
+        },
+        {
+          "word": "page",
+          "tip": "Long a sound, then g, e."
+        },
+        {
+          "word": "giant",
+          "tip": "The g says j because an i follows it. Gi, ant."
+        },
+        {
+          "word": "magic",
+          "tip": "Mag, ic. The g says j before the i. Ends with just a c."
+        },
+        {
+          "word": "giraffe",
+          "tip": "Starts with g, i. Ends with double f, then e."
+        },
+        {
+          "word": "energy",
+          "tip": "En, er, gee. The g is soft before the y at the end."
+        }
+      ]
+    },
+    {
+      "id": "y2extra-03",
+      "name": "Y2 Extra 3: soft c",
+      "words": [
+        {
+          "word": "race",
+          "tip": "The s sound at the end is c, e."
+        },
+        {
+          "word": "ice",
+          "tip": "Just three letters. The c says s because an e follows it."
+        },
+        {
+          "word": "cell",
+          "tip": "The c says s before the e. Ends with double l."
+        },
+        {
+          "word": "city",
+          "tip": "The c says s before the i. Ends with t, y."
+        },
+        {
+          "word": "fancy",
+          "tip": "Fan, then c, y. The c says s before the y."
+        },
+        {
+          "word": "space",
+          "tip": "Starts with s, p. The ending s sound is c, e."
+        },
+        {
+          "word": "pencil",
+          "tip": "Pen, then c, i, l. The c says s."
+        },
+        {
+          "word": "circle",
+          "tip": "Both c's start the same way: c, i, r. Ends with c, l, e."
+        },
+        {
+          "word": "dance",
+          "tip": "Dan, then c, e."
+        },
+        {
+          "word": "mice",
+          "tip": "More than one mouse. The s sound is c, e."
+        }
+      ]
+    },
+    {
+      "id": "y2extra-04",
+      "name": "Y2 Extra 4: silent letters",
+      "words": [
+        {
+          "word": "knock",
+          "tip": "A silent k at the start, and c, k at the end. Knock knock!"
+        },
+        {
+          "word": "know",
+          "tip": "Silent k at the start. Ends like snow."
+        },
+        {
+          "word": "knee",
+          "tip": "Silent k, then n, double e."
+        },
+        {
+          "word": "knife",
+          "tip": "Silent k at the start. Ends like life."
+        },
+        {
+          "word": "gnat",
+          "tip": "A tiny fly with a silent g at the start."
+        },
+        {
+          "word": "gnaw",
+          "tip": "Silent g at the start. Ends like saw."
+        },
+        {
+          "word": "write",
+          "tip": "A silent w at the start. Ends like kite."
+        },
+        {
+          "word": "wrong",
+          "tip": "Silent w at the start, then r, o, n, g."
+        },
+        {
+          "word": "wrap",
+          "tip": "Silent w at the start, then rap."
+        },
+        {
+          "word": "written",
+          "tip": "Silent w, then rit, ten, with a double t."
+        }
+      ]
+    },
+    {
+      "id": "y2extra-05",
+      "name": "Y2 Extra 5: l e, e l, a l, i l",
+      "words": [
+        {
+          "word": "table",
+          "tip": "The ending l sound is l, e: tab, le."
+        },
+        {
+          "word": "apple",
+          "tip": "Double p, then l, e."
+        },
+        {
+          "word": "bottle",
+          "tip": "Double t, then l, e."
+        },
+        {
+          "word": "little",
+          "tip": "Double t, then l, e."
+        },
+        {
+          "word": "camel",
+          "tip": "This one ends e, l, like a hump on the end."
+        },
+        {
+          "word": "tunnel",
+          "tip": "Double n, then e, l."
+        },
+        {
+          "word": "metal",
+          "tip": "This one ends a, l."
+        },
+        {
+          "word": "animal",
+          "tip": "An, i, mal. Ends a, l."
+        },
+        {
+          "word": "hospital",
+          "tip": "Hos, pi, tal. Ends a, l."
+        },
+        {
+          "word": "fossil",
+          "tip": "Double s, then i, l."
+        }
+      ]
+    },
+    {
+      "id": "y2extra-06",
+      "name": "Y2 Extra 6: y changes to i",
+      "words": [
+        {
+          "word": "flies",
+          "tip": "Fly becomes flies: change the y to i, then add e, s."
+        },
+        {
+          "word": "tries",
+          "tip": "Try becomes tries: change y to i, add e, s."
+        },
+        {
+          "word": "babies",
+          "tip": "Baby becomes babies: change y to i, add e, s."
+        },
+        {
+          "word": "carries",
+          "tip": "Carry becomes carries: double r, change y to i, add e, s."
+        },
+        {
+          "word": "copied",
+          "tip": "Copy becomes copied: change y to i, add e, d."
+        },
+        {
+          "word": "cried",
+          "tip": "Cry becomes cried: change y to i, add e, d."
+        },
+        {
+          "word": "happier",
+          "tip": "Happy becomes happier: double p, change y to i, add e, r."
+        },
+        {
+          "word": "funniest",
+          "tip": "Funny becomes funniest: double n, change y to i, add e, s, t."
+        },
+        {
+          "word": "replied",
+          "tip": "Reply becomes replied: change y to i, add e, d."
+        },
+        {
+          "word": "puppies",
+          "tip": "Puppy becomes puppies: double p, change y to i, add e, s."
+        }
+      ]
+    },
+    {
+      "id": "y2extra-07",
+      "name": "Y2 Extra 7: a after w and before l",
+      "words": [
+        {
+          "word": "ball",
+          "tip": "Says or, but spelt a, double l."
+        },
+        {
+          "word": "call",
+          "tip": "Like ball, with a c at the front."
+        },
+        {
+          "word": "walk",
+          "tip": "The l is silent. W, a, l, k."
+        },
+        {
+          "word": "talk",
+          "tip": "Like walk, with a t at the front."
+        },
+        {
+          "word": "always",
+          "tip": "Starts with a, l, then w, a, y, s. Only one l."
+        },
+        {
+          "word": "want",
+          "tip": "After w, the o sound is spelt with an a."
+        },
+        {
+          "word": "watch",
+          "tip": "After w, use an a. Ends t, c, h."
+        },
+        {
+          "word": "wander",
+          "tip": "W, a, n, then der. To wander is to walk about slowly."
+        },
+        {
+          "word": "squash",
+          "tip": "Starts s, q, u. After q, u, the o sound is an a."
+        },
+        {
+          "word": "swan",
+          "tip": "After w, the o sound is an a. S, w, a, n."
+        }
+      ]
+    },
+    {
+      "id": "y2extra-08",
+      "name": "Y2 Extra 8: o says u, and e y",
+      "words": [
+        {
+          "word": "other",
+          "tip": "Sounds like uther, but starts with an o."
+        },
+        {
+          "word": "mother",
+          "tip": "M, then other."
+        },
+        {
+          "word": "brother",
+          "tip": "B, r, then other."
+        },
+        {
+          "word": "nothing",
+          "tip": "Sounds like nuthing, but it's no, thing."
+        },
+        {
+          "word": "Monday",
+          "tip": "Sounds like Munday, but it's spelt with an o. Capital M."
+        },
+        {
+          "word": "key",
+          "tip": "The ee sound at the end is e, y."
+        },
+        {
+          "word": "donkey",
+          "tip": "Don, key."
+        },
+        {
+          "word": "monkey",
+          "tip": "Mon, key. The o says u."
+        },
+        {
+          "word": "chimney",
+          "tip": "Chim, ney. Ends e, y."
+        },
+        {
+          "word": "valley",
+          "tip": "Double l, then e, y."
+        }
+      ]
+    },
+    {
+      "id": "y2extra-09",
+      "name": "Y2 Extra 9: w words and the zh sound",
+      "words": [
+        {
+          "word": "word",
+          "tip": "After w, the er sound is spelt o, r."
+        },
+        {
+          "word": "work",
+          "tip": "W, o, r, k. After w, the er sound is o, r."
+        },
+        {
+          "word": "worm",
+          "tip": "W, o, r, m."
+        },
+        {
+          "word": "world",
+          "tip": "Like word, with an l before the d."
+        },
+        {
+          "word": "worth",
+          "tip": "W, o, r, t, h."
+        },
+        {
+          "word": "war",
+          "tip": "After w, the or sound is spelt a, r."
+        },
+        {
+          "word": "warm",
+          "tip": "War, then m."
+        },
+        {
+          "word": "towards",
+          "tip": "To, wards. After w, the or sound is a, r."
+        },
+        {
+          "word": "television",
+          "tip": "Tele, vision. The zh sound is spelt s, i, o, n."
+        },
+        {
+          "word": "treasure",
+          "tip": "Treas, ure. The zh sound is an s."
+        }
+      ]
+    },
+    {
+      "id": "y2extra-10",
+      "name": "Y2 Extra 10: ment, ness, ful, less, ly",
+      "words": [
+        {
+          "word": "enjoyment",
+          "tip": "Enjoy, then ment."
+        },
+        {
+          "word": "sadness",
+          "tip": "Sad, then ness with a double s."
+        },
+        {
+          "word": "careful",
+          "tip": "Care, then ful with just one l."
+        },
+        {
+          "word": "playful",
+          "tip": "Play, then ful with just one l."
+        },
+        {
+          "word": "hopeless",
+          "tip": "Hope, then less with a double s."
+        },
+        {
+          "word": "badly",
+          "tip": "Bad, then l, y."
+        },
+        {
+          "word": "happily",
+          "tip": "Happy becomes happily: change the y to i, then l, y."
+        },
+        {
+          "word": "darkness",
+          "tip": "Dark, then ness."
+        },
+        {
+          "word": "payment",
+          "tip": "Pay, then ment."
+        },
+        {
+          "word": "helpful",
+          "tip": "Help, then ful with just one l."
+        }
+      ]
+    },
+    {
+      "id": "y2extra-11",
+      "name": "Y2 Extra 11: t i o n",
+      "words": [
+        {
+          "word": "station",
+          "tip": "Sta, then the shun sound spelt t, i, o, n. All aboard!"
+        },
+        {
+          "word": "fiction",
+          "tip": "Fic, then t, i, o, n."
+        },
+        {
+          "word": "motion",
+          "tip": "Mo, then t, i, o, n."
+        },
+        {
+          "word": "nation",
+          "tip": "Na, then t, i, o, n."
+        },
+        {
+          "word": "section",
+          "tip": "Sec, then t, i, o, n."
+        },
+        {
+          "word": "action",
+          "tip": "Ac, then t, i, o, n."
+        },
+        {
+          "word": "potion",
+          "tip": "Po, then t, i, o, n. A magic potion!"
+        },
+        {
+          "word": "lotion",
+          "tip": "Lo, then t, i, o, n."
+        }
+      ]
+    },
+    {
+      "id": "y2extra-12",
+      "name": "Y2 Extra 12: adding endings",
+      "words": [
+        {
+          "word": "hiking",
+          "tip": "Hike loses its e before i, n, g."
+        },
+        {
+          "word": "hiked",
+          "tip": "Hike just adds a d."
+        },
+        {
+          "word": "nicer",
+          "tip": "Nice just adds an r."
+        },
+        {
+          "word": "nicest",
+          "tip": "Nice loses its e, then add e, s, t."
+        },
+        {
+          "word": "shiny",
+          "tip": "Shine loses its e before the y."
+        },
+        {
+          "word": "patting",
+          "tip": "Pat doubles the t before i, n, g."
+        },
+        {
+          "word": "humming",
+          "tip": "Hum doubles the m before i, n, g."
+        },
+        {
+          "word": "dropped",
+          "tip": "Drop doubles the p before e, d."
+        },
+        {
+          "word": "sadder",
+          "tip": "Sad doubles the d before e, r."
+        },
+        {
+          "word": "runner",
+          "tip": "Run doubles the n before e, r."
+        }
+      ]
+    }
+  ],
+  "challenges": [
+    {
+      "id": "y2extra-ch-a",
+      "name": "Y2 Extra Challenge A (sets 1 to 4)",
+      "sets": [
+        "y2extra-01",
+        "y2extra-02",
+        "y2extra-03",
+        "y2extra-04"
+      ]
+    },
+    {
+      "id": "y2extra-ch-b",
+      "name": "Y2 Extra Challenge B (sets 5 to 8)",
+      "sets": [
+        "y2extra-05",
+        "y2extra-06",
+        "y2extra-07",
+        "y2extra-08"
+      ]
+    },
+    {
+      "id": "y2extra-ch-c",
+      "name": "Y2 Extra Challenge C (sets 9 to 12)",
+      "sets": [
+        "y2extra-09",
+        "y2extra-10",
+        "y2extra-11",
+        "y2extra-12"
+      ]
+    }
+  ],
+  "dictionaryWords": []
+}
